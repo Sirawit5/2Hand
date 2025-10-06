@@ -6,12 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-
-  private apiUrl = 'http://localhost:3000/api/hello'; // URL ของ backend Node.js
+  private apiUrlSignup = 'http://localhost:3000/api/signup';  // URL สำหรับ signup
+  private apiUrlLogin = 'http://localhost:3000/api/login';    // URL สำหรับ login
 
   constructor(private http: HttpClient) { }
 
-  getHelloMessage(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  // ฟังก์ชันสำหรับ signup
+  signup(user: { username: string; email: string; password: string }): Observable<any> {
+    return this.http.post<any>(this.apiUrlSignup, user);
+  }
+
+  // ฟังก์ชันสำหรับ login
+  login(user: { username: string; password: string }): Observable<any> {
+    return this.http.post<any>(this.apiUrlLogin, user);
   }
 }
