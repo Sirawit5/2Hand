@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'sign-up', component: SignupPageComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' } // ให้หน้าแรกไป home
+  { path: '', redirectTo: '/home', pathMatch: 'full' } 
 ];
 
 @NgModule({
