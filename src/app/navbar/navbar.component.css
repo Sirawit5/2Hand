@@ -69,3 +69,19 @@
 .signup-btn:hover, .login-btn:hover {
   background-color: #007f7f;
 }
+
+/* ปุ่ม Sign Out */
+.signout-btn {
+  background-color: red; /* สีพื้นหลังเป็นสีแดง */
+  color: white; /* ตัวอักษรเป็นสีขาว */
+  border: none; /* ไม่ต้องการขอบ */
+  padding: 8px 16px; /* ขนาดของปุ่ม */
+  font-size: 14px; /* ขนาดตัวอักษร */
+  border-radius: 5px; /* มุมปุ่มโค้งมน */
+  cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นปุ่ม */
+  transition: background-color 0.3s; /* เพิ่มการเปลี่ยนแปลงสีเมื่อ hover */
+}
+
+.signout-btn:hover {
+  background-color: #cc0000; /* เมื่อ hover จะเปลี่ยนเป็นสีแดงเข้ม */
+}

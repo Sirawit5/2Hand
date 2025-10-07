@@ -12,14 +12,16 @@
     <a href="#">About</a>
   </div>
 
-  <!-- เพิ่มช่องค้นหาตรงนี้ -->
   <div class="navbar-search">
     <input type="text" placeholder="Search..." />
   </div>
 
- <div class="navbar-actions">
-  <button class="signup-btn" [routerLink]="['/sign-up']">Sign Up</button>
-  <button class="login-btn" [routerLink]="['/login']">Log In</button>
-</div>
-
+  <div class="navbar-actions">
+    <span *ngIf="isLoggedIn">Welcome, {{ username }}!</span> <!-- แสดงชื่อผู้ใช้ -->
+    <!-- หากยังไม่ได้ล็อกอิน จะแสดงปุ่ม Sign Up และ Log In -->
+    <button *ngIf="!isLoggedIn" class="signup-btn" [routerLink]="['/sign-up']">Sign Up</button>
+    <button *ngIf="!isLoggedIn" class="login-btn" [routerLink]="['/login']">Log In</button>
+    <!-- หากล็อกอินแล้ว จะมีปุ่ม Sign Out -->
+    <button *ngIf="isLoggedIn" class="signout-btn" (click)="signOut()">Sign Out</button>
+  </div>
 </nav>
