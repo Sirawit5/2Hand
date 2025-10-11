@@ -8,13 +8,18 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';  // สมมติว่ามีหน้า Home
 import { NavbarComponent } from './navbar/navbar.component';
+import { AboutUSComponent } from './about-us/about-us.component';
+import { WomenComponent } from './women/women.component';
+import { MenComponent } from './men/men.component';
+import { KidsComponent } from './kids/kids.component';
+import { SportsComponent } from './sports/sports.component';
 @NgModule({
   declarations: [
     AppComponent,
     SignupPageComponent,
     LoginPageComponent,
     HomeComponent, 
-    NavbarComponent
+    NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent, SportsComponent
   ],
   imports: [
     BrowserModule,
