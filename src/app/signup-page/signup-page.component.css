@@ -64,3 +64,9 @@
 .sign-up-btn:hover {
   background-color: #007f7f;
 }
+
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+  font-size: 14px;
+}

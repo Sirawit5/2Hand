@@ -12,12 +12,14 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   // ฟังก์ชันสำหรับ signup
-  signup(user: { username: string; email: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrlSignup, user);
+  signup(user: { username: string; email: string; password: string; confirmPassword: string }): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };  // ตั้งค่า Content-Type เป็น JSON
+    return this.http.post<any>(this.apiUrlSignup, user, { headers });
   }
 
   // ฟังก์ชันสำหรับ login
   login(user: { username: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrlLogin, user);
+    const headers = { 'Content-Type': 'application/json' };  // ตั้งค่า Content-Type เป็น JSON
+    return this.http.post<any>(this.apiUrlLogin, user, { headers });
   }
 }

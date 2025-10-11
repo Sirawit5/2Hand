@@ -1,6 +1,11 @@
+<app-navbar></app-navbar> <!-- แสดง Navbar ทุกหน้า -->
 <div class="sign-up-page">
   <div class="sign-up-container">
     <h2 class="sign-up-title">Create an Account</h2>
+    
+    <!-- แสดงข้อความแจ้งเตือน -->
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
     <form class="sign-up-form" (ngSubmit)="signup()">
       <div class="input-group">
         <label for="username">Username</label>

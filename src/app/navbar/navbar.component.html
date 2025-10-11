@@ -17,7 +17,7 @@
   </div>
 
   <div class="navbar-actions">
-    <span *ngIf="isLoggedIn">Welcome, {{ username }}!</span> <!-- แสดงชื่อผู้ใช้ -->
+    <span *ngIf="isLoggedIn"> {{ username }}</span> <!-- แสดงชื่อผู้ใช้ -->
     <!-- หากยังไม่ได้ล็อกอิน จะแสดงปุ่ม Sign Up และ Log In -->
     <button *ngIf="!isLoggedIn" class="signup-btn" [routerLink]="['/sign-up']">Sign Up</button>
     <button *ngIf="!isLoggedIn" class="login-btn" [routerLink]="['/login']">Log In</button>
