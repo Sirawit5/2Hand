@@ -22,4 +22,6 @@ export class ApiService {
     const headers = { 'Content-Type': 'application/json' };  // ตั้งค่า Content-Type เป็น JSON
     return this.http.post<any>(this.apiUrlLogin, user, { headers });
   }
+
+  
 }

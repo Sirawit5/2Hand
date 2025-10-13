@@ -1,44 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  // สร้าง BehaviorSubject สำหรับเก็บสถานะการล็อกอิน
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  // === state หลัก ===
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   private usernameSubject = new BehaviorSubject<string | null>(localStorage.getItem('username'));
+  private roleSubject = new BehaviorSubject<string | null>(localStorage.getItem('role')); // ✅ เพิ่ม role
 
-  constructor() { }
+  constructor() {}
 
-  // ฟังก์ชันที่เช็คว่า token มีอยู่ใน localStorage หรือไม่
-  hasToken(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
-  // ฟังก์ชันที่สมัครสมาชิกและล็อกอิน
-  login(username: string, token: string): void {
+  // === actions ===
+  login(username: string, token: string, role: string): void {
     localStorage.setItem('token', token);
     localStorage.setItem('username', username);
+    localStorage.setItem('role', role);
+
     this.loggedIn.next(true);
     this.usernameSubject.next(username);
+    this.roleSubject.next(role);
   }
 
-  // ฟังก์ชันสำหรับออกจากระบบ
   signOut(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('role');
+
     this.loggedIn.next(false);
     this.usernameSubject.next(null);
+    this.roleSubject.next(null);
   }
 
-  // Observable สำหรับตรวจสอบสถานะการล็อกอิน
-  get isLoggedIn() {
-    return this.loggedIn.asObservable();
-  }
+  // === selectors (observables) ===
+  get isLoggedIn() { return this.loggedIn.asObservable(); }
+  get username()   { return this.usernameSubject.asObservable(); }
+  get role()       { return this.roleSubject.asObservable(); }
 
-  // Observable สำหรับชื่อผู้ใช้
-  get username() {
-    return this.usernameSubject.asObservable();
-  }
+  // === sync snapshot ถ้าจำเป็น ===
+  get currentRole(): string | null { return this.roleSubject.value; }
 }

@@ -8,6 +8,7 @@ import { SportsComponent } from './sports/sports.component';
 import { WomenComponent } from './women/women.component';
 import { MenComponent } from './men/men.component';
 import { KidsComponent } from './kids/kids.component';
+import { AdminPageComponent } from './admin/admin-page/admin-page.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'women', component: WomenComponent},
   { path: 'men', component: MenComponent},
   { path: 'kids', component: KidsComponent},
+  { path: 'admin-page', component: AdminPageComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' } 
 ];
 

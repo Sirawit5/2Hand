@@ -1,87 +1,101 @@
-/* Navbar Styling */
+/* ===== Navbar Base ===== */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background-color: white;
-  padding: 10px 20px;
+  background-color: #ffffff;
   border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-.navbar-brand a {
-  font-size: 24px;
-  font-weight: bold;
-  color: #00b3b3;
-  text-decoration: none;
-}
-
-.navbar-links {
-  font-size: 18px;
+/* ===== Navbar List ===== */
+.navbar ul {
   display: flex;
-  gap: 40px;
+  align-items: center;
+  list-style: none;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar-links a {
+/* ===== Navbar Links ===== */
+.navbar ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+  color: #00b3b3;
+}
+
+/* ===== Username + Buttons ===== */
+.username {
   font-size: 14px;
   color: #333;
-  text-decoration: none;
-  transition: color 0.3s;
+  margin-right: 10px;
+  font-weight: 500;
 }
 
-.navbar-links a:hover {
-  color: #00b3b3;
-}
-
-/* เพิ่มช่องค้นหาตรงนี้ */
-.navbar-search {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  padding: 5px 10px;
-  border-radius: 20px;
-  width: 300px;
-}
-
-.navbar-search input {
+.navbar button {
   border: none;
-  outline: none;
-  font-size: 14px;
-  width: 100%;
-  padding: 5px;
-}
-
-.navbar-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.signup-btn, .login-btn {
-  background-color: #00b3b3;
-  color: white;
-  border: none;
+  border-radius: 6px;
   padding: 8px 16px;
   font-size: 14px;
-  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.signup-btn:hover, .login-btn:hover {
-  background-color: #007f7f;
+  transition: background-color 0.3s ease, transform 0.15s ease;
 }
 
 /* ปุ่ม Sign Out */
-.signout-btn {
-  background-color: red; /* สีพื้นหลังเป็นสีแดง */
-  color: white; /* ตัวอักษรเป็นสีขาว */
-  border: none; /* ไม่ต้องการขอบ */
-  padding: 8px 16px; /* ขนาดของปุ่ม */
-  font-size: 14px; /* ขนาดตัวอักษร */
-  border-radius: 5px; /* มุมปุ่มโค้งมน */
-  cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นปุ่ม */
-  transition: background-color 0.3s; /* เพิ่มการเปลี่ยนแปลงสีเมื่อ hover */
+.navbar button {
+  background-color: #ff4b4b;
+  color: #fff;
 }
 
-.signout-btn:hover {
-  background-color: #cc0000; /* เมื่อ hover จะเปลี่ยนเป็นสีแดงเข้ม */
+.navbar button:hover {
+  background-color: #cc0000;
+  transform: translateY(-1px);
+}
+
+/* ===== Guest Mode Buttons (Login / Sign Up) ===== */
+.navbar a[routerLink="/login"],
+.navbar a[routerLink="/sign-up"] {
+  background-color: #00b3b3;
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.navbar a[routerLink="/login"]:hover,
+.navbar a[routerLink="/sign-up"]:hover {
+  background-color: #007f7f;
+  transform: translateY(-1px);
+}
+
+/* ===== Responsive (Mobile) ===== */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .navbar ul li a {
+    font-size: 14px;
+  }
+
+  .navbar button,
+  .navbar a[routerLink="/login"],
+  .navbar a[routerLink="/sign-up"] {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
 }
