@@ -1,0 +1,94 @@
+/* admin-page.component.css */
+
+/* ใช้ flexbox สำหรับจัดให้ navbar อยู่ทางซ้ายและฟอร์มอยู่ทางขวา */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* ใช้ความสูงเต็มจอ */
+  display: flex;
+  justify-content: flex-start;  /* ให้ navbar อยู่ทางซ้าย */
+  align-items: center;  /* จัดฟอร์มให้อยู่กลางในแนวตั้ง */
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;  /* สีพื้นหลัง */
+}
+
+/* ให้ .container อยู่ที่ตำแหน่งที่ถูกต้อง */
+.container {
+  background-color: #fff;  /* สีพื้นหลังของฟอร์ม */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงาของกล่อง */
+  width: 450px;  /* ความกว้างของฟอร์ม */
+  text-align: center;
+  margin-left: 250px; /* ขยับฟอร์มไปทางขวาเพื่อไม่ให้ชนกับ navbar */
+  margin-right: 20px;  /* ระยะห่างจากขอบขวา */
+}
+
+/* .navbar กำหนดให้เป็นแนวนอน */
+.navbar {
+  width: 250px; /* ความกว้างของ navbar */
+  background-color: #2c3e50; /* สีของ navbar */
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+}
+
+/* ปรับการแสดงผลของลิงก์ใน navbar */
+.navbar a {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  background-color: #575757;
+}
+
+/* ฟอร์มต่าง ๆ ในฟอร์ม */
+form div {
+  margin-bottom: 15px;
+}
+
+/* ให้ label ชิดด้านซ้าย */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* ขอบเขตของ input และ textarea */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* ปรับปุ่มให้สวยงาม */
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin-top: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* เปลี่ยนสีปุ่มเมื่อ hover */
+button:hover {
+  background-color: #45a049;
+}
+
+/* ให้ระยะห่างระหว่างฟอร์มและ navbar */
+.container {
+  margin-left: 260px; /* ระยะห่างจาก navbar ที่เลื่อนไปทางขวา */
+}
