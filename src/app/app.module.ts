@@ -12,16 +12,13 @@ import { AboutUSComponent } from './about-us/about-us.component';
 import { WomenComponent } from './women/women.component';
 import { MenComponent } from './men/men.component';
 import { KidsComponent } from './kids/kids.component';
-import { SportsComponent } from './sports/sports.component';
-import { AdminPageComponent } from './admin/admin-page/admin-page.component';
-import { NavbarAdminComponent } from './admin/navbar-admin/navbar-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
     SignupPageComponent,
     LoginPageComponent,
     HomeComponent, 
-    NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent, SportsComponent, AdminPageComponent, NavbarAdminComponent
+    NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent,
   ],
   imports: [
     BrowserModule,

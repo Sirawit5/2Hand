@@ -1,24 +1,26 @@
-<nav class="navbar">
-  <ul>
-    <li><a routerLink="/home">Home</a></li>
-    <li><a routerLink="/women">Women</a></li>
-    <li><a routerLink="/men">Men</a></li>
-    <li><a routerLink="/kids">Kids</a></li>
-    <li><a routerLink="/sports">Sports</a></li>
-    <li><a routerLink="/about">About</a></li>
+ <nav class="navbar">
+        <header>
+            <div class="top-row">
+                <a href="/" class="logo">2HShop</a>
+                
+                <div class="search-box">
+                    <input type="search" placeholder="Search for products...">
+                </div>
 
-    
+                <div class="auth-buttons">
+                    <button routerLink="/login">Log In</button>
+                    <button routerLink="/sign-up">Sign Up</button>
+                </div>
+            </div>
 
-    <!-- แสดงลิงก์เฉพาะ ADMIN -->
-    <li *ngIf="(isAdmin$ | async)"><a routerLink="/admin-page">Admin Panel</a></li>
-
-    <li *ngIf="(isLoggedIn$ | async); else guest">
-      <span class="username">👤 {{ (username$ | async) || '' }}</span>
-      <button (click)="signOut()">Sign Out</button>
-    </li>
-    <ng-template #guest>
-      <a routerLink="/login">Log In</a>
-      <a routerLink="/sign-up">Sign Up</a>
-    </ng-template>
-  </ul>
-</nav>
+            <div class="bottom-row">
+                <ul class="nav-links">
+                    <li><a routerLink="/home">Home</a></li>
+                    <li><a routerLink="/women">Women</a></li>
+                    <li><a routerLink="/men">Men</a></li>
+                    <li><a routerLink="/kids">Kids</a></li>
+                    <li><a routerLink="/about">About</a></li>
+                </ul>
+            </div>
+        </header>
+    </nav>
