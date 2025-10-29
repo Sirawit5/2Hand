@@ -1,0 +1,138 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing);
+}
+
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 24px;
+}
+
+.left {
+  position: sticky;
+  top: 100px;
+}
+
+.image-card {
+  background: var(--panel-bg);
+  border-radius: var(--radius);
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f3f4f6, #fff);
+}
+
+.icons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.icons button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #e6eef6;
+  background: var(--panel-bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icons button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0;
+}
+
+.description {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.buy {
+  flex: 1;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.buy:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.add {
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid #e6eef6;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .product-detail {
+    grid-template-columns: 1fr;
+  }
+  
+  .left {
+    position: static;
+  }
+}

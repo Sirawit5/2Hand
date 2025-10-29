@@ -1,162 +1,36 @@
-<app-navbar></app-navbar> <!-- แสดง Navbar ทุกหน้า -->
-<section class="hero">
-        <h1>Discover Your Style</h1>
-        <p>Premium clothing for every occasion</p>
-        <button class="btn btn-primary">Shop Now</button>
-    </section>
+<app-navbar></app-navbar>
+<h2>🌟 Featured Products</h2>
 
-    <!-- Sales Banner Section -->
-    <section class="sales-banner">
-        <h2>🔥 MEGA SALE - UP TO 70% OFF! 🔥</h2>
-        <p>Limited Time Offer - Don't Miss Out!</p>
-        <div class="countdown">
-            <div class="countdown-item">
-                <span id="days">02</span>
-                <label>Days</label>
-            </div>
-            <div class="countdown-item">
-                <span id="hours">14</span>
-                <label>Hours</label>
-            </div>
-            <div class="countdown-item">
-                <span id="minutes">35</span>
-                <label>Minutes</label>
-            </div>
-            <div class="countdown-item">
-                <span id="seconds">42</span>
-                <label>Seconds</label>
-            </div>
-        </div>
-    </section>
+<div class="filters">
+  <label>Size:
+    <select [(ngModel)]="selectedSize" (change)="applyFilters()">
+      <option value="all">All</option>
+      <option *ngFor="let s of ['S','M','L','36','37','38','XS']" [value]="s">{{s}}</option>
+    </select>
+  </label>
+  <label>Sort:
+    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+      <option value="none">Default</option>
+      <option value="asc">Price: Low → High</option>
+      <option value="desc">Price: High → Low</option>
+    </select>
+  </label>
+</div>
 
-    <!-- Featured Products -->
-    <section class="featured">
-        <div class="featured-container">
-            <h2 class="section-title">Featured Products</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <span class="sale-badge">-50%</span>
-                    <div class="product-image">👕</div>
-                    <div class="product-info">
-                        <div class="product-name">Classic T-Shirt</div>
-                        <div class="product-price">
-                            $14.99
-                            <span class="original-price">$29.99</span>
-                        </div>
-                        <div class="product-rating">★★★★★ (128)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="sale-badge">-40%</span>
-                    <div class="product-image">👖</div>
-                    <div class="product-info">
-                        <div class="product-name">Denim Jeans</div>
-                        <div class="product-price">
-                            $35.99
-                            <span class="original-price">$59.99</span>
-                        </div>
-                        <div class="product-rating">★★★★☆ (95)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="sale-badge">-60%</span>
-                    <div class="product-image">🧥</div>
-                    <div class="product-info">
-                        <div class="product-name">Winter Jacket</div>
-                        <div class="product-price">
-                            $35.99
-                            <span class="original-price">$89.99</span>
-                        </div>
-                        <div class="product-rating">★★★★★ (73)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="sale-badge">-35%</span>
-                    <div class="product-image">👟</div>
-                    <div class="product-info">
-                        <div class="product-name">Sport Shoes</div>
-                        <div class="product-price">
-                            $51.99
-                            <span class="original-price">$79.99</span>
-                        </div>
-                        <div class="product-rating">★★★★☆ (156)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="sale-badge">-45%</span>
-                    <div class="product-image">👗</div>
-                    <div class="product-info">
-                        <div class="product-name">Summer Dress</div>
-                        <div class="product-price">
-                            $27.49
-                            <span class="original-price">$49.99</span>
-                        </div>
-                        <div class="product-rating">★★★★★ (82)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="sale-badge">-30%</span>
-                    <div class="product-image">🧢</div>
-                    <div class="product-info">
-                        <div class="product-name">Baseball Cap</div>
-                        <div class="product-price">
-                            $17.49
-                            <span class="original-price">$24.99</span>
-                        </div>
-                        <div class="product-rating">★★★★☆ (64)</div>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About StyleHub</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Our Story</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Customer Service</h4>
-                <ul>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
-                    <li><a href="#">Accessibility</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect With Us</h4>
-                <ul>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">TikTok</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 2HShop. All rights reserved.</p>
-        </div>
-    </footer>
+<div class="product-grid">
+  <div class="product-card" *ngFor="let product of displayed">
+    <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
+    <div class="product-image">{{product.image}}</div>
+  <div class="product-info">
+      <div class="product-name">{{product.name}}</div>
+      <div class="product-price">
+        ${{product.price}}
+        <span class="original-price" *ngIf="product.originalPrice">
+          ${{product.originalPrice}}
+        </span>
+      </div>
+  <div class="product-rating">⭐ {{product.rating}}/5</div>
+  <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
+    </div>
+  </div>
+</div>

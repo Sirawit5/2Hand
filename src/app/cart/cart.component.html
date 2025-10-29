@@ -1,0 +1,19 @@
+<app-navbar></app-navbar>
+<h2>🛒 ตะกร้าสินค้า</h2>
+
+<div *ngIf="items.length === 0">ไม่มีสินค้าในตะกร้า</div>
+
+<div *ngFor="let item of items" class="cart-item">
+  <span class="emoji">{{ item.product.image }}</span>
+  <span>{{ item.product.name }}</span>
+  <span>${{ item.product.price }}</span>
+  <span class="meta-small">Added: {{ item.addedAt }}</span>
+  <button (click)="removeItem(item.product.id)">ลบ</button>
+</div>
+
+<hr>
+<div class="cart-total">
+  รวมทั้งหมด: <b>${{ total }}</b>
+</div>
+
+<button (click)="checkout()" [disabled]="items.length === 0">ดำเนินการชำระเงิน</button>

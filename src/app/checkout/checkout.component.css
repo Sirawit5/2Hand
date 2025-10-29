@@ -1,0 +1,28 @@
+.checkout-container {
+	display: flex;
+	gap: 1.5rem;
+	padding: 1rem;
+}
+.checkout-container .left {
+	flex: 1 1 60%;
+}
+.checkout-container .right {
+	flex: 0 0 350px;
+	border-left: 1px solid #eee;
+	padding-left: 1rem;
+}
+.address-card {
+	background: #fafafa;
+	padding: 1rem;
+	border-radius: 8px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.address-actions { display:flex; gap:0.5rem; margin-top:0.5rem }
+.payment-options label { display:block; margin:0.4rem 0 }
+.order-summary .item { display:flex; gap:0.5rem; align-items:center; padding:0.5rem 0; border-bottom:1px solid #f0f0f0 }
+.order-summary .thumb { font-size:1.6rem }
+.order-summary .meta { flex:1 }
+.summary-line, .summary-total { display:flex; justify-content:space-between; padding:0.5rem 0 }
+.summary-total { font-weight:700; border-top:1px solid #eee; margin-top:0.5rem }
+.place-order { width:100%; padding:0.75rem; background:#007bff; color:#fff; border:none; border-radius:6px }
+

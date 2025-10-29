@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container" *ngIf="user">
+  <h2>My Profile</h2>
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+
+  <section class="saved">
+    <h3>Liked items</h3>
+    <div *ngIf="!saved || saved.length === 0">ยังไม่มีสินค้าที่ชอบ</div>
+    <div class="saved-list">
+      <div class="saved-card" *ngFor="let fav of saved">
+        <div class="thumb">{{ fav.product.image }}</div>
+        <div class="meta">
+          <div class="name">{{ fav.product.name }}</div>
+          <div class="price">${{ fav.product.price }}</div>
+          <div class="meta-small">Liked: {{ fav.likedAt }}</div>
+        </div>
+        <div class="actions">
+          <a [routerLink]="['/product', fav.product.id]">View</a>
+          <button (click)="removeSaved(fav.product.id)">♥ Remove</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="orders">
+    <h3>Orders</h3>
+    <div *ngIf="!orders || orders.length === 0">ยังไม่มีคำสั่งซื้อ</div>
+    <div *ngFor="let o of orders" class="order-card">
+      <div><strong>Order #{{ o.id }}</strong> — {{ o.status }}</div>
+      <div class="order-items">
+        <div *ngFor="let it of o.items" class="order-item">
+          <span class="thumb">{{ it.product.image }}</span>
+          <span class="name">{{ it.product.name }}</span>
+          <span class="price">${{ it.product.price }}</span>
+          <span class="meta-small">Added: {{ it.addedAt }}</span>
+        </div>
+      </div>
+      <div class="order-total">Total: ${{ o.total }}</div>
+    </div>
+  </section>
+</div>

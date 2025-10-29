@@ -1,26 +1,35 @@
- <nav class="navbar">
-        <header>
-            <div class="top-row">
-                <a href="/" class="logo">2HShop</a>
-                
-                <div class="search-box">
-                    <input type="search" placeholder="Search for products...">
-                </div>
+<nav class="navbar">
+  <header>
+    <div class="top-row">
+      <a routerLink="/home" class="logo">2HShop</a>
 
-                <div class="auth-buttons">
-                    <button routerLink="/login">Log In</button>
-                    <button routerLink="/sign-up">Sign Up</button>
-                </div>
-            </div>
+      <div class="search-box">
+        <input type="search" placeholder="Search for products..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+        <button class="search-btn" (click)="onSearch()">Search</button>
+      </div>
 
-            <div class="bottom-row">
-                <ul class="nav-links">
-                    <li><a routerLink="/home">Home</a></li>
-                    <li><a routerLink="/women">Women</a></li>
-                    <li><a routerLink="/men">Men</a></li>
-                    <li><a routerLink="/kids">Kids</a></li>
-                    <li><a routerLink="/about">About</a></li>
-                </ul>
-            </div>
-        </header>
-    </nav>
+      <div class="auth-buttons" *ngIf="!isLoggedIn">
+        <button routerLink="/login">Log In</button>
+        <button routerLink="/signup">Sign Up</button>
+      </div>
+
+      <div class="profile-menu" *ngIf="isLoggedIn">
+        <span class="welcome-text">Hi, {{ username }}</span>
+        <button class="cart-btn" routerLink="/cart">Cart <span class="cart-badge" *ngIf="cartCount">{{ cartCount }}</span></button>
+        <button class="profile-btn" routerLink="/profile">Profile</button>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <ul class="nav-links">
+        <li><a routerLink="/home">Home</a></li>
+        <li><a routerLink="/women">Women</a></li>
+        <li><a routerLink="/men">Men</a></li>
+        <li><a routerLink="/kids">Kids</a></li>
+        <li><a routerLink="/about">About</a></li>
+      </ul>
+    </div>
+    <app-breadcrumb></app-breadcrumb>
+  </header>
+</nav>

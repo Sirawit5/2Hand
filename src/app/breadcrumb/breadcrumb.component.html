@@ -1,0 +1,9 @@
+<nav class="breadcrumb" [hidden]="!breadcrumbs || !breadcrumbs.length">
+  <ul>
+    <li><a href="/home">Home</a></li>
+    <li *ngFor="let bc of breadcrumbs; let last = last">
+      <span [hidden]="last"> / <a href="{{ bc.url }}">{{ bc.label }}</a></span>
+      <span [hidden]="!last"> / <strong>{{ bc.label }}</strong></span>
+    </li>
+  </ul>
+</nav>

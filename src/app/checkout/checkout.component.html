@@ -1,0 +1,67 @@
+<app-navbar></app-navbar>
+
+<div class="checkout-container">
+  <div class="left">
+    <h3>ที่อยู่จัดส่ง</h3>
+    <div class="address-card">
+      <div *ngIf="!editingAddress">
+        <p>{{ addressObj.line1 }}</p>
+        <p *ngIf="addressObj.line2">{{ addressObj.line2 }}</p>
+        <p *ngIf="addressObj.city">{{ addressObj.city }} {{ addressObj.postcode }}</p>
+        <p *ngIf="addressObj.phone">เบอร์โทรศัพท์ {{ addressObj.phone }}</p>
+        <div class="address-actions">
+          <button (click)="editAddress()">แก้ไขที่อยู่</button>
+          <button (click)="saveAddress()">เพิ่มที่อยู่</button>
+        </div>
+      </div>
+      <div *ngIf="editingAddress" class="address-form">
+        <label>ที่อยู่ (บรรทัด 1)
+          <input [(ngModel)]="addressObj.line1" />
+        </label>
+        <label>บรรทัด 2
+          <input [(ngModel)]="addressObj.line2" />
+        </label>
+        <label>จังหวัด/อำเภอ
+          <input [(ngModel)]="addressObj.city" />
+        </label>
+        <label>รหัสไปรษณีย์
+          <input [(ngModel)]="addressObj.postcode" />
+        </label>
+        <label>เบอร์โทร
+          <input [(ngModel)]="addressObj.phone" />
+        </label>
+        <div class="address-actions">
+          <button (click)="saveAddress()">บันทึก</button>
+        </div>
+      </div>
+    </div>
+
+    <h3>ช่องทางการชำระเงิน</h3>
+    <div class="payment-options">
+      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" value="bank_transfer" /> โอนเงินธนาคาร</label>
+      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" value="cod" /> ชำระเงินปลายทาง</label>
+    </div>
+  </div>
+
+  <div class="right">
+    <h3>สรุปคำสั่งซื้อ</h3>
+    <div class="order-summary">
+      <div class="item" *ngFor="let it of items">
+        <div class="thumb">{{ it.image }}</div>
+        <div class="meta">
+          <div class="name">{{ it.name }}</div>
+          <div class="size" *ngIf="it.sizes && it.sizes.length">Size: {{ it.sizes[0] }}</div>
+        </div>
+        <div class="price">${{ it.price }}</div>
+      </div>
+
+      <div class="summary-line"><span>Subtotal</span><span>${{ subtotal.toFixed(2) }}</span></div>
+      <div class="summary-line"><span>Marketplace fee</span><span>${{ marketplaceFee.toFixed(2) }}</span></div>
+      <div class="summary-total"><span>Total to pay</span><span>${{ total.toFixed(2) }}</span></div>
+
+      <div class="actions">
+        <button class="place-order" (click)="confirmOrder()">ยืนยันการสั่งซื้อ</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,265 +1,39 @@
 <app-navbar></app-navbar>
-<div class="kids-page">
-  <!-- Page Header -->
-  <div class="page-header">
-    <h1>Kid's Collection</h1>
-    <p>Fun and stylish outfits for your little ones</p>
-  </div>
+<h2>🧸 Kids Collection</h2>
 
-  <!-- Filter Section -->
-  <div class="filter-section">
-    <div class="filter-container">
-      <div class="filter-group">
-        <label>Category:</label>
-        <select class="filter-select">
-          <option value="all">All Categories</option>
-          <option value="tops">Tops & T-Shirts</option>
-          <option value="bottoms">Bottoms & Pants</option>
-          <option value="dresses">Dresses & Skirts</option>
-          <option value="outerwear">Jackets & Hoodies</option>
-          <option value="accessories">Accessories</option>
-        </select>
+<div class="filters">
+  <label>Size:
+    <select [(ngModel)]="selectedSize" (change)="applyFilters()">
+      <option value="all">All</option>
+      <option *ngFor="let s of ['XS','S','M']" [value]="s">{{s}}</option>
+    </select>
+  </label>
+  <label>Sort:
+    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+      <option value="none">Default</option>
+      <option value="asc">Price: Low → High</option>
+      <option value="desc">Price: High → Low</option>
+    </select>
+  </label>
+</div>
+
+<div class="product-grid">
+  <div class="product-card" *ngFor="let product of displayed">
+    <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
+    <div class="product-image">{{product.image}}</div>
+    <div class="product-info">
+      <div class="product-name">{{product.name}}</div>
+      <div class="product-price">
+        ${{product.price}}
+        <span class="original-price" *ngIf="product.originalPrice">
+          ${{product.originalPrice}}
+        </span>
       </div>
-      <div class="filter-group">
-        <label>Age Group:</label>
-        <select class="filter-select">
-          <option value="all">All Ages</option>
-          <option value="0-2">0-2 Years</option>
-          <option value="3-5">3-5 Years</option>
-          <option value="6-8">6-8 Years</option>
-          <option value="9-12">9-12 Years</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Price Range:</label>
-        <select class="filter-select">
-          <option value="all">All Prices</option>
-          <option value="0-15">$0 - $15</option>
-          <option value="15-30">$15 - $30</option>
-          <option value="30-50">$30 - $50</option>
-          <option value="50+">$50+</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Sort By:</label>
-        <select class="filter-select">
-          <option value="featured">Featured</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
-          <option value="newest">Newest</option>
-          <option value="rating">Best Rating</option>
-        </select>
+      <div class="product-rating">⭐ {{product.rating}}/5</div>
+      <div class="product-actions">
+        <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
+        <button (click)="toggleSave(product)" class="heart-btn">{{ isSaved(product) ? '♥' : '♡' }}</button>
       </div>
     </div>
   </div>
-
-  <!-- Products Section -->
-  <div class="products-section">
-    <div class="products-container">
-      <div class="product-grid">
-        <!-- Product Card 1 -->
-        <div class="product-card">
-          <span class="sale-badge">-40%</span>
-          <div class="product-image">
-            <div class="placeholder-image">👕</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Cartoon T-Shirt Set</div>
-            <div class="product-price">
-              $17.99
-              <span class="original-price">$29.99</span>
-            </div>
-            <div class="product-rating">★★★★★ (156)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 2 -->
-        <div class="product-card">
-          <span class="new-badge">NEW</span>
-          <div class="product-image">
-            <div class="placeholder-image">👗</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Princess Party Dress</div>
-            <div class="product-price">$34.99</div>
-            <div class="product-rating">★★★★★ (98)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 3 -->
-        <div class="product-card">
-          <span class="sale-badge">-35%</span>
-          <div class="product-image">
-            <div class="placeholder-image">👖</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Denim Jeans</div>
-            <div class="product-price">
-              $19.99
-              <span class="original-price">$30.99</span>
-            </div>
-            <div class="product-rating">★★★★☆ (134)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 4 -->
-        <div class="product-card">
-          <span class="sale-badge">-45%</span>
-          <div class="product-image">
-            <div class="placeholder-image">🧥</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Colorful Hoodie</div>
-            <div class="product-price">
-              $21.99
-              <span class="original-price">$39.99</span>
-            </div>
-            <div class="product-rating">★★★★★ (187)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 5 -->
-        <div class="product-card">
-          <div class="product-image">
-            <div class="placeholder-image">👟</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Sports Sneakers</div>
-            <div class="product-price">$27.99</div>
-            <div class="product-rating">★★★★☆ (112)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 6 -->
-        <div class="product-card">
-          <span class="sale-badge">-50%</span>
-          <div class="product-image">
-            <div class="placeholder-image">🎒</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">School Backpack</div>
-            <div class="product-price">
-              $14.99
-              <span class="original-price">$29.99</span>
-            </div>
-            <div class="product-rating">★★★★★ (203)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 7 -->
-        <div class="product-card">
-          <span class="new-badge">NEW</span>
-          <div class="product-image">
-            <div class="placeholder-image">🧢</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Baseball Cap</div>
-            <div class="product-price">$12.99</div>
-            <div class="product-rating">★★★★☆ (76)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- Product Card 8 -->
-        <div class="product-card">
-          <span class="sale-badge">-30%</span>
-          <div class="product-image">
-            <div class="placeholder-image">🩳</div>
-            <div class="product-overlay">
-              <button class="quick-view-btn">Quick View</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Casual Shorts</div>
-            <div class="product-price">
-              $13.99
-              <span class="original-price">$19.99</span>
-            </div>
-            <div class="product-rating">★★★★★ (145)</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pagination -->
-      <div class="pagination">
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">4</button>
-        <button class="page-btn">Next</button>
-      </div>
-    </div>
-  </div>
-  <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About StyleHub</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Our Story</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Customer Service</h4>
-                <ul>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
-                    <li><a href="#">Accessibility</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect With Us</h4>
-                <ul>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">TikTok</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 2HShop. All rights reserved.</p>
-        </div>
-    </footer>
 </div>

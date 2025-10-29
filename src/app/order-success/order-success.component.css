@@ -1,0 +1,4 @@
+.host{display:flex;align-items:center;justify-content:center;padding:24px}
+.success-card{background:var(--panel-bg);padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.04);text-align:center}
+.success-card h2{margin:0 0 8px}
+.success-card p{color:var(--muted)}

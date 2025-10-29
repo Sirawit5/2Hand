@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+
+<div class="product-detail">
+  <div class="left">
+    <div class="image-card">
+      <div class="image">{{ product?.image }}</div>
+      <div class="icons">
+        <button (click)="toggleSave()" class="fav">{{ isSaved() ? '♥' : '♡' }}</button>
+        <button class="bookmark">🔖</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <h2>{{ product?.name }}</h2>
+    <div class="price">${{ product?.price }}</div>
+
+    <div *ngIf="product?.sizes?.length">
+      <label>Size:</label>
+    </div>
+    <div class="actions">
+      <button class="buy" (click)="buyNow()">Buy Now!</button>
+      <button class="add" (click)="addToBag()">Add to Cart</button>
+    </div>
+  </div>
+</div>

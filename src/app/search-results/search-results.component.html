@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+<div class="search-results">
+  <h2>Search results for "{{ query }}"</h2>
+
+  <div class="filters">
+    <label>Size:
+      <select [(ngModel)]="selectedSize" (change)="applyFilters()">
+        <option value="all">All</option>
+        <option *ngFor="let s of ['XS','S','M','L','XL','36','37','38']" [value]="s">{{s}}</option>
+      </select>
+    </label>
+    <label>Sort:
+      <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+        <option value="none">Default</option>
+        <option value="asc">Price: Low → High</option>
+        <option value="desc">Price: High → Low</option>
+      </select>
+    </label>
+  </div>
+
+  <div *ngIf="!displayed || displayed.length === 0">
+    <p>No products found.</p>
+  </div>
+
+  <ul *ngIf="displayed && displayed.length">
+    <li *ngFor="let p of displayed" class="product">
+      <div class="img">{{ p.image }}</div>
+      <div class="info">
+        <div class="name">{{ p.name }}</div>
+        <div class="price">${{ p.price }}</div>
+      </div>
+      <div class="actions">
+        <a [routerLink]="['/product', p.id]" class="view-btn">View</a>
+        <button (click)="toggleSave(p)" class="heart-btn">{{ isSaved(p) ? '♥' : '♡' }}</button>
+      </div>
+    </li>
+  </ul>
+</div>
