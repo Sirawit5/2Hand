@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-order-success',
   standalone: false,
   template: `
+  <app-navbar></app-navbar>
     <div class="success">
       <h2>✅ ยืนยันคำสั่งซื้อสำเร็จ</h2>
       <p>ขอบคุณที่สั่งซื้อสินค้ากับเรา!</p>
