@@ -1,14 +1,16 @@
 <app-navbar></app-navbar>
-<h2>🌟 Featured Products</h2>
+
+<h2>Featured Products</h2>
 
 <div class="filters">
-  <label>Size:
+  <label>Size: 
     <select [(ngModel)]="selectedSize" (change)="applyFilters()">
       <option value="all">All</option>
       <option *ngFor="let s of ['S','M','L','36','37','38','XS']" [value]="s">{{s}}</option>
     </select>
   </label>
-  <label>Sort:
+  
+  <label>Sort: 
     <select [(ngModel)]="sortOrder" (change)="applyFilters()">
       <option value="none">Default</option>
       <option value="asc">Price: Low → High</option>
@@ -21,7 +23,7 @@
   <div class="product-card" *ngFor="let product of displayed">
     <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
     <div class="product-image">{{product.image}}</div>
-  <div class="product-info">
+    <div class="product-info">
       <div class="product-name">{{product.name}}</div>
       <div class="product-price">
         ${{product.price}}
@@ -29,8 +31,8 @@
           ${{product.originalPrice}}
         </span>
       </div>
-  <div class="product-rating">⭐ {{product.rating}}/5</div>
-  <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
+      <div class="product-rating">⭐ {{product.rating}}/5</div>
+      <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
     </div>
   </div>
 </div>
