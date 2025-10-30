@@ -45,34 +45,22 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   private buildBreadcrumbs(url: string) {
-    const parts = url.split('/').filter(p => p);
-
-    // special handling for /product/:id to show category and product name
-    if (parts.length >= 2 && parts[0].toLowerCase() === 'product' && /^\d+$/.test(parts[1])) {
-      const id = Number(parts[1]);
-      this.productService.getProductById(id).subscribe(p => {
-        const crumbs: Array<{ label: string; url: string }> = [];
-        if (p) {
-          // category crumb (links back to category listing)
-          crumbs.push({ label: this.translateLabel(this.titleCase(p.category)), url: `/${p.category}` });
-          // product name as last crumb (not typically a link but we'll include URL)
-          crumbs.push({ label: p.name, url: `/product/${id}` });
-        } else {
-          crumbs.push({ label: `Product #${id}`, url: `/product/${id}` });
-        }
-        this.breadcrumbs = crumbs;
-      });
-      return;
-    }
-
-    const crumbs: Array<{ label: string; url: string }> = [];
-    let acc = '';
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      acc += '/' + part;
-      const label = /^\d+$/.test(part) ? `#${part}` : this.titleCase(decodeURIComponent(part));
-      crumbs.push({ label: this.translateLabel(label), url: acc });
-    }
-    this.breadcrumbs = crumbs;
+  if (url === '/home' || url === '/') {
+    this.breadcrumbs = [];
+    return;
   }
+
+  const parts = url.split('/').filter(p => p);
+  const crumbs: Array<{ label: string; url: string }> = [];
+  let acc = '';
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    acc += '/' + part;
+    const label = /^\d+$/.test(part) ? `#${part}` : this.titleCase(decodeURIComponent(part));
+    crumbs.push({ label: this.translateLabel(label), url: acc });
+  }
+  this.breadcrumbs = crumbs;
+}
+
+  
 }

@@ -1,15 +1,19 @@
 <app-navbar></app-navbar>
-<div class="search-results">
-  <h2>ผลการค้นหา สำหรับ "{{ query }}"</h2>
 
+<div class="search-results">
+  <h2>ผลการค้นหาสำหรับ "{{ query }}"</h2>
+
+  <!-- Filters -->
   <div class="filters">
-    <label>ขนาด:
+    <label>
+      ขนาด:
       <select [(ngModel)]="selectedSize" (change)="applyFilters()">
         <option value="all">ทั้งหมด</option>
         <option *ngFor="let s of ['XS','S','M','L','XL','36','37','38']" [value]="s">{{s}}</option>
       </select>
     </label>
-    <label>จัดเรียง:
+    <label>
+      จัดเรียง:
       <select [(ngModel)]="sortOrder" (change)="applyFilters()">
         <option value="none">เริ่มต้น</option>
         <option value="asc">ราคา: ต่ำ → สูง</option>
@@ -18,20 +22,44 @@
     </label>
   </div>
 
-  <div *ngIf="!displayed || displayed.length === 0">
-    <p>ไม่พบสินค้า</p>
+  <!-- No Results -->
+  <div *ngIf="!displayed || displayed.length === 0" class="no-results">
+    <p>ไม่พบสินค้าที่ค้นหา</p>
   </div>
 
-  <div *ngIf="displayed && displayed.length" class="product-grid">
-    <div *ngFor="let p of displayed" class="product-card">
-      <div class="product-image">{{ p.image }}</div>
+  <!-- Products Grid -->
+  <div *ngIf="displayed && displayed.length > 0" class="product-grid">
+    <div *ngFor="let p of displayed; trackBy: trackByProduct" class="product-card">
+      <!-- Badges -->
+      <span class="sale-badge" *ngIf="p.sale">-{{p.sale}}%</span>
+      <span class="new-badge" *ngIf="p.new">ใหม่</span>
+      
+      <!-- Product Image -->
+      <div class="product-image" 
+           [ngStyle]="{'background-image': 'url(' + p.image + ')'}">
+      </div>
+      
+      <!-- Product Info -->
       <div class="product-info">
         <div class="product-name">{{ p.name }}</div>
-        <div class="product-price">฿{{ p.price }}</div>
+        <div class="product-price">
+          ฿{{ p.price }}
+          <span class="original-price" *ngIf="p.originalPrice">
+            ฿{{ p.originalPrice }}
+          </span>
+        </div>
+        <div class="product-rating" *ngIf="p.rating">⭐ {{ p.rating }}/5</div>
       </div>
+      
+      <!-- Product Actions -->
       <div class="product-actions">
         <a [routerLink]="['/product', p.id]" class="view-btn">ดูรายละเอียด</a>
-        <button (click)="toggleSave(p)" class="heart-btn">{{ isSaved(p) ? '♥' : '♡' }}</button>
+        <button (click)="toggleSave(p)" 
+                class="heart-btn" 
+                [class.saved]="isSaved(p)"
+                [attr.aria-label]="isSaved(p) ? 'ลบออกจากรายการโปรด' : 'เพิ่มในรายการโปรด'">
+          {{ isSaved(p) ? '♥' : '♡' }}
+        </button>
       </div>
     </div>
   </div>

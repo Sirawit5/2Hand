@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="cart-header">
       <h2 class="cart-title">ตะกร้าสินค้า</h2>
-      <span class="items-count">{{ items.length }} {{ items.length === 1 ? 'รายการ' : 'รายการ' }}</span>
+      <span class="items-count">{{ items.length }} รายการ</span>
     </div>
 
     <!-- Empty State -->
@@ -13,7 +13,7 @@
       <div class="empty-icon">🛒</div>
       <h3>ตะกร้าสินค้าของคุณว่างเปล่า</h3>
       <p>เพิ่มสินค้าเพื่อเริ่มต้น!</p>
-      <a routerLink="/home" class="continue-shopping-btn">เลือกซื้อสินค้าต่อ</a>
+      <a routerLink="/" class="continue-shopping-btn">เลือกซื้อสินค้าต่อ</a>
     </div>
 
     <!-- Cart Content -->
@@ -21,29 +21,76 @@
       <!-- Cart Items -->
       <div class="cart-items-section">
         <div class="cart-item" *ngFor="let item of items">
-          <div class="item-image" [ngStyle]="{'background-image': 'url(' + item.product.image + ')'}"></div>
+          <!-- Item Image -->
+          <div class="item-image">
+            <img [src]="item.product.image" 
+                 [alt]="item.product.name">
+          </div>
           
+          <!-- Item Details -->
           <div class="item-details">
             <h3 class="item-name">{{ item.product.name }}</h3>
-            <p class="item-meta">เพิ่มเมื่อ {{ item.addedAt | date:'short' }}</p>
             
+            <!-- Size Info -->
+            <p class="item-size" *ngIf="item.size">
+              <span class="size-label">ขนาด:</span> 
+              <span class="size-value">{{ item.size }}</span>
+            </p>
+            
+            <!-- Price per unit -->
+            <p class="item-unit-price">฿{{ item.product.price | number:'1.2-2' }} / ชิ้น</p>
+            
+            <!-- Quantity Control (Mobile) -->
+            <div class="quantity-control-mobile">
+              <label>จำนวน:</label>
+              <div class="qty-selector">
+                <button class="qty-btn" (click)="decrementQuantity(item)">−</button>
+                <input type="number" 
+                       [(ngModel)]="item.quantity" 
+                       (ngModelChange)="updateQuantity(item, $event)"
+                       min="1" 
+                       max="99" />
+                <button class="qty-btn" (click)="incrementQuantity(item)">+</button>
+              </div>
+            </div>
+            
+            <!-- Mobile Actions -->
             <div class="item-actions-mobile">
-              <span class="item-price">฿{{ item.product.price }}</span>
+              <span class="item-total-price">
+                รวม: ฿{{ (item.product.price * (item.quantity || 1)) | number:'1.2-2' }}
+              </span>
               <button class="remove-btn-mobile" (click)="removeItem(item.product.id)">
-                ลบ
+                🗑️ ลบ
               </button>
             </div>
           </div>
 
-          <div class="item-price-desktop">
-            <span class="price-label">ราคา</span>
-            <span class="price-amount">฿{{ item.product.price }}</span>
+          <!-- Quantity Control (Desktop) -->
+          <div class="quantity-control-desktop">
+            <span class="qty-label">จำนวน</span>
+            <div class="qty-selector">
+              <button class="qty-btn" (click)="decrementQuantity(item)">−</button>
+              <input type="number" 
+                     [(ngModel)]="item.quantity" 
+                     (ngModelChange)="updateQuantity(item, $event)"
+                     min="1" 
+                     max="99" />
+              <button class="qty-btn" (click)="incrementQuantity(item)">+</button>
+            </div>
           </div>
 
+          <!-- Item Price (Desktop) -->
+          <div class="item-price-desktop">
+            <span class="price-label">ราคารวม</span>
+            <span class="price-amount">
+              ฿{{ (item.product.price * (item.quantity || 1)) | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <!-- Remove Button (Desktop) -->
           <div class="item-actions-desktop">
             <button class="remove-btn" (click)="removeItem(item.product.id)">
-              
-              <span class="remove-text">ลบรายการ</span>
+              🗑️ <span class="remove-text">ลบรายการ</span>
             </button>
           </div>
         </div>
@@ -53,9 +100,21 @@
       <div class="order-summary">
         <h3 class="summary-title">สรุปคำสั่งซื้อ</h3>
         
+        <div class="summary-items-detail">
+          <div class="summary-item" *ngFor="let item of items">
+            <span class="item-summary-name">{{ item.product.name }}</span>
+            <span class="item-summary-qty">× {{ item.quantity || 1 }}</span>
+            <span class="item-summary-price">
+              ฿{{ (item.product.price * (item.quantity || 1)) | number:'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
+        
         <div class="summary-row">
           <span class="summary-label">ราคาสินค้า</span>
-          <span class="summary-value">฿{{ total }}</span>
+          <span class="summary-value">฿{{ total | number:'1.2-2' }}</span>
         </div>
         
         <div class="summary-row">
@@ -63,16 +122,11 @@
           <span class="summary-value free">ฟรี</span>
         </div>
         
-        <div class="summary-row">
-          <span class="summary-label">ภาษี</span>
-          <span class="summary-value">คำนวณเมื่อชำระเงิน</span>
-        </div>
-        
         <div class="summary-divider"></div>
         
         <div class="summary-row total-row">
           <span class="summary-label">ยอดรวมทั้งหมด</span>
-          <span class="summary-value total-value">฿{{ total }}</span>
+          <span class="summary-value total-value">฿{{ total | number:'1.2-2' }}</span>
         </div>
 
         <button 
@@ -82,7 +136,7 @@
           ดำเนินการชำระเงิน
         </button>
 
-        <a routerLink="/home" class="continue-shopping-link">
+        <a routerLink="/" class="continue-shopping-link">
           ← เลือกซื้อสินค้าต่อ
         </a>
       </div>

@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./search-results.component.css'],
   standalone: false
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnDestroy {
   query = '';
   results: Product[] = [];
   displayed: Product[] = [];
@@ -28,18 +28,23 @@ export class SearchResultsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // subscribe to favorites id list for fast O(1) checks and optimistic UI
+    // Subscribe to favorites
     this.favSub = this.favService.favIds$.subscribe(ids => {
       this.savedIds = new Set(ids || []);
     });
+
+    // Subscribe to query params
     this.route.queryParams.subscribe(params => {
       this.query = params['q'] || '';
       if (this.query) {
-        this.productService.searchProducts(this.query).subscribe(r => this.results = r);
+        this.productService.searchProducts(this.query).subscribe(r => {
+          this.results = r;
+          this.applyFilters();
+        });
       } else {
         this.results = [];
+        this.displayed = [];
       }
-      this.applyFilters();
     });
   }
 
@@ -47,16 +52,25 @@ export class SearchResultsComponent implements OnInit {
     this.favSub?.unsubscribe();
   }
 
+  trackByProduct(_index: number, item: Product) {
+    return item?.id;
+  }
+
   applyFilters() {
     let list = [...this.results];
+    
+    // Filter by size
     if (this.selectedSize && this.selectedSize !== 'all') {
       list = list.filter(p => p.sizes && p.sizes.includes(this.selectedSize));
     }
+    
+    // Sort by price
     if (this.sortOrder === 'asc') {
       list.sort((a, b) => a.price - b.price);
     } else if (this.sortOrder === 'desc') {
       list.sort((a, b) => b.price - a.price);
     }
+    
     this.displayed = list;
   }
 
@@ -65,7 +79,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   toggleSave(p: Product) {
-    // optimistic update for UI responsiveness
+    // Optimistic update
     if (this.savedIds.has(p.id)) {
       this.savedIds.delete(p.id);
     } else {

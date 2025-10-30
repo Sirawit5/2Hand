@@ -2,16 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService, CartItem } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
-import { Product } from '../services/product.service';
 import { AuthService } from '../services/auth.service';
-
-interface Address {
-  line1: string;
-  line2?: string;
-  city?: string;
-  postcode?: string;
-  phone?: string;
-}
+import { AddressService, Address, SavedAddress } from '../services/address.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,99 +21,181 @@ export class CheckoutComponent implements OnInit {
   marketplaceFee = 0;
   total = 0;
 
+  // สำหรับแสดงรายการที่อยู่ที่บันทึกไว้
+  savedAddresses: SavedAddress[] = [];
+  selectedAddressId: number | null = null;
+
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
-    private router: Router
-    , private authService: AuthService
+    private router: Router,
+    private authService: AuthService,
+    private addressService: AddressService
   ) {}
 
   ngOnInit(): void {
-  // load cart items
-  this.items = this.cartService.getCart();
-  this.computeTotals();
+    // โหลดสินค้าในตะกร้า
+    this.items = this.cartService.getCart();
+    this.computeTotals();
 
-    // prefer address from logged-in profile
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      // assume profile stored username/email/address/phone
-      this.addressObj.line1 = user.address || user.line1 || '';
-      this.addressObj.phone = user.phone || user.tel || user.phoneNumber || '';
-      // allow city/postcode fields if present
-      this.addressObj.city = user.city || '';
-      this.addressObj.postcode = user.postcode || '';
+    // โหลดที่อยู่ที่บันทึกไว้
+    this.savedAddresses = this.addressService.getAllAddresses();
+
+    // ใช้ที่อยู่หลักหรือที่อยู่ล่าสุด
+    const defaultAddr = this.addressService.getDefaultAddress();
+    const lastUsedAddr = this.addressService.getLastUsedAddress();
+    
+    if (defaultAddr) {
+      this.loadAddress(defaultAddr);
+      this.selectedAddressId = defaultAddr.id;
+    } else if (lastUsedAddr) {
+      this.loadAddress(lastUsedAddr);
+      this.selectedAddressId = lastUsedAddr.id;
+    } else {
+      // ลองดึงจาก user profile
+      const user = this.authService.getCurrentUser();
+      if (user) {
+        this.addressObj.line1 = user.address || '';
+        this.addressObj.phone = user.phone || '';
+        this.addressObj.city = user.city || '';
+        this.addressObj.postcode = user.postcode || '';
+      }
     }
 
-    // fallback to saved address from localStorage
-    const saved = localStorage.getItem('shippingAddress');
-    if (saved && !this.addressObj.line1) {
-      try { this.addressObj = JSON.parse(saved); } catch { }
+    // โหลด payment method ที่ใช้ล่าสุด
+    const lastPayment = localStorage.getItem('lastPaymentMethod');
+    if (lastPayment) {
+      this.paymentMethod = lastPayment;
     }
   }
 
-  // keep paymentMethod only; QR removed
-  onSelectPayment(method: string) {
+  // โหลดที่อยู่ที่เลือก
+  loadAddress(address: SavedAddress | Address): void {
+    this.addressObj = {
+      line1: address.line1,
+      line2: address.line2,
+      city: address.city,
+      postcode: address.postcode,
+      phone: address.phone
+    };
+  }
+
+  // เปลี่ยนที่อยู่ที่เลือก
+  onAddressSelect(addressId: number): void {
+    const address = this.savedAddresses.find(a => a.id === addressId);
+    if (address) {
+      this.loadAddress(address);
+      this.selectedAddressId = addressId;
+    }
+  }
+
+  onSelectPayment(method: string): void {
     this.paymentMethod = method;
-
+    // จำ payment method ที่เลือก
+    localStorage.setItem('lastPaymentMethod', method);
   }
 
-  updateQuantityFor(item: CartItem, newQty: number) {
+  updateQuantityFor(item: CartItem, newQty: number): void {
     if (!item || !item.product) return;
-    // clamp newQty to minimum 1
     const n = Math.max(1, Math.floor(Number(newQty) || 1));
     this.cartService.updateItem(item.product.id, n, item.size, item.size);
-    // reload items and recompute totals
     this.items = this.cartService.getCart();
     this.computeTotals();
   }
 
-  updateSizeFor(item: CartItem, newSize?: string) {
+  updateSizeFor(item: CartItem, newSize?: string): void {
     if (!item || !item.product) return;
-    // call updateItem with newSize and oldSize
     this.cartService.updateItem(item.product.id, item.quantity || 1, newSize, item.size);
     this.items = this.cartService.getCart();
     this.computeTotals();
   }
 
+  confirmOrder(): void {
+    // ตรวจสอบข้อมูล
+    if (!this.paymentMethod) {
+      alert('กรุณาเลือกช่องทางการชำระเงิน');
+      return;
+    }
+    
+    if (!this.addressObj.line1) {
+      alert('กรุณากรอกที่อยู่จัดส่ง');
+      return;
+    }
 
-  confirmOrder() {
-    if (!this.paymentMethod || !this.addressObj.line1) return alert('กรุณากรอกข้อมูลให้ครบ');
-    const items = this.cartService.getCart();
+    if (!this.addressObj.phone) {
+      alert('กรุณากรอกเบอร์โทรศัพท์');
+      return;
+    }
+
+    // สร้างคำสั่งซื้อ
     const orderTotal = this.subtotal + this.shipping + this.marketplaceFee;
     this.orderService.createOrder({
-      items,
+      items: this.items,
       total: orderTotal,
       paymentMethod: this.paymentMethod,
-      address: `${this.addressObj.line1} ${this.addressObj.line2 || ''} ${this.addressObj.city || ''} ${this.addressObj.postcode || ''} ${this.addressObj.phone || ''}`.trim()
+      address: this.thaiAddress
     });
+
+    // บันทึกที่อยู่ (ถ้ายังไม่มีในระบบ)
+    if (!this.selectedAddressId) {
+      this.addressService.saveAddress(this.addressObj, 'ที่อยู่จัดส่ง', this.savedAddresses.length === 0);
+    }
+
+    // เคลียร์ตะกร้า
     this.cartService.clearCart();
-    // optionally save address
-    localStorage.setItem('shippingAddress', JSON.stringify(this.addressObj));
+
+    // ไปหน้าสำเร็จ
     this.router.navigate(['/order-success']);
   }
 
-  computeTotals() {
+  computeTotals(): void {
     this.subtotal = this.items.reduce((s, c) => s + (c.product.price * (c.quantity || 1)), 0);
-    // marketplaceFee could be a percent; for now fixed 0
     this.marketplaceFee = 0;
     this.total = this.subtotal + this.shipping + this.marketplaceFee;
   }
 
-  setShipping(value: number) {
+  setShipping(value: number): void {
     this.shipping = value || 0;
     this.computeTotals();
   }
 
-  editAddress() {
+  editAddress(): void {
     this.editingAddress = true;
   }
 
-  saveAddress() {
+  saveAddress(): void {
+    if (!this.addressObj.line1) {
+      alert('กรุณากรอกที่อยู่');
+      return;
+    }
+
+    // ถ้าเป็นการแก้ไขที่อยู่ที่มีอยู่
+    if (this.selectedAddressId) {
+      this.addressService.updateAddress(this.selectedAddressId, this.addressObj);
+    } else {
+      // บันทึกที่อยู่ใหม่
+      const newAddr = this.addressService.saveAddress(
+        this.addressObj, 
+        'ที่อยู่จัดส่ง', 
+        this.savedAddresses.length === 0
+      );
+      this.selectedAddressId = newAddr.id;
+      this.savedAddresses = this.addressService.getAllAddresses();
+    }
+
     this.editingAddress = false;
-    localStorage.setItem('shippingAddress', JSON.stringify(this.addressObj));
   }
 
-  // Return a single-line Thai-formatted address for display or QR payloads
+  deleteSelectedAddress(): void {
+    if (this.selectedAddressId && confirm('คุณต้องการลบที่อยู่นี้หรือไม่?')) {
+      this.addressService.deleteAddress(this.selectedAddressId);
+      this.savedAddresses = this.addressService.getAllAddresses();
+      this.selectedAddressId = null;
+      this.addressObj = { line1: '' };
+    }
+  }
+
+  // ที่อยู่แบบบรรทัดเดียว
   get thaiAddress(): string {
     const parts: string[] = [];
     if (this.addressObj.line1) parts.push(this.addressObj.line1);
@@ -129,14 +203,13 @@ export class CheckoutComponent implements OnInit {
     const cityPart = [this.addressObj.city, this.addressObj.postcode].filter(Boolean).join(' ');
     if (cityPart) parts.push(cityPart);
     if (this.addressObj.phone) parts.push(`โทร ${this.addressObj.phone}`);
-    // Join with comma and ensure Thai punctuation where appropriate
     return parts.join(', ');
   }
 
-  // Build a public QR image URL encoding the Thai address and amount.
+  // QR URL
   get qrUrl(): string {
     try {
-      const payload = this.thaiAddress || `ยอด: ${this.total}`;
+      const payload = `ยอดชำระ: ${this.total.toFixed(2)} บาท\n${this.thaiAddress}`;
       return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
     } catch (e) {
       return '';

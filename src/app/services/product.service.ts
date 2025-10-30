@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
+// Product Interface
 export interface Product {
   id: number;
   name: string;
   price: number;
   originalPrice?: number;
   category: string;
-  image: string; // emoji หรือ url
-  sale?: number; // % off
-  rating: number; // 1-5
+  subcategory?: string;
+  image: string;
+  sale?: number;
   new?: boolean;
-  sizes?: string[]; // optional sizes available for product
+  rating: number;
+  sizes: string[];
+  description?: string; // เพิ่ม description
 }
 
 @Injectable({
@@ -20,22 +23,203 @@ export interface Product {
 export class ProductService {
 
   private products: Product[] = [
-    // Women's
-    { id: 1, name: 'Summer Floral Dress', price: 32.99, originalPrice: 59.99, category: 'women', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8o6qlxGrNGO8BOcJ3D6XUtnQQynmyMczvng&s', sale: 45, rating: 5, sizes: ['S', 'M', 'L'] },
-    { id: 2, name: 'Elegant Silk Blouse', price: 41.99, originalPrice: 59.99, category: 'women', image: 'data:image/jpeg;base64,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', sale: 30, rating: 4, sizes: ['S', 'M', 'L'] },
-    { id: 3, name: 'High-Waist Skinny Jeans', price: 29.99, originalPrice: 59.99, category: 'women', image: 'data:image/jpeg;base64,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', sale: 50, rating: 5, sizes: ['S', 'M', 'L'] },
-    { id: 4, name: 'Leather Jacket', price: 129.99, category: 'women', image: 'https://cdn-images.farfetch-contents.com/17/81/19/24/17811924_37690679_600.jpg', new: true, rating: 5, sizes: ['M', 'L'] },
-    { id: 5, name: 'Classic Heels', price: 47.99, originalPrice: 79.99, category: 'women', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLcV3dm4NlpW35gzMOtH-9XIZ6RTT6wBFUTw&s', sale: 40, rating: 4, sizes: ['36', '37', '38'] },
+    // Women's Products
+    { 
+      id: 1, 
+      name: 'Summer Floral Dress', 
+      price: 32.99, 
+      originalPrice: 59.99, 
+      category: 'women', 
+      subcategory: 'tops', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8o6qlxGrNGO8BOcJ3D6XUtnQQynmyMczvng&s', 
+      sale: 45, 
+      rating: 5, 
+      sizes: ['S', 'M', 'L'],
+      description: 'ชุดเดรสลายดอกไม้สไตล์ฤดูร้อน ผ้าเบาสบาย ระบายอากาศได้ดี เหมาะสำหรับวันสบายๆ หรือไปเที่ยวทะเล ตัดเย็บอย่างประณีตด้วยผ้าคุณภาพดี ใส่สบาย ไม่ร้อน เนื้อผ้านุ่ม ลายสวย สีสดใส'
+    },
+    { 
+      id: 2, 
+      name: 'Elegant Silk Blouse', 
+      price: 41.99, 
+      originalPrice: 59.99, 
+      category: 'women', 
+      subcategory: 'tops', 
+      image: 'https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=500', 
+      sale: 30, 
+      rating: 4, 
+      sizes: ['S', 'M', 'L'],
+      description: 'เสื้อไหมแท้เนื้อละเอียด ดีไซน์หรูหรา เหมาะสำหรับการทำงานหรืองานสำคัญ ผ้าไหมเกรดพรีเมียม ระบายอากาศได้ดี สวมใส่สบาย ดูดีมีระดับ เพิ่มความมั่นใจในทุกโอกาส'
+    },
+    { 
+      id: 3, 
+      name: 'High-Waist Skinny Jeans', 
+      price: 29.99, 
+      originalPrice: 59.99, 
+      category: 'women', 
+      subcategory: 'pants', 
+      image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500', 
+      sale: 50, 
+      rating: 5, 
+      sizes: ['S', 'M', 'L'],
+      description: 'กางเกงยีนส์ขายาวเอวสูง ทรงสกินนี่เข้ารูป ยืดหยุ่นได้ดี สวมใส่สบาย เนื้อผ้าคอตตอนผสมสแปนเด็กซ์ ช่วยให้ขาดูเรียวยาว ทรงสวย ใส่แล้วสบายมากค่ะ ไม่อึดอัด'
+    },
+    { 
+      id: 4, 
+      name: 'Leather Jacket', 
+      price: 129.99, 
+      category: 'women', 
+      subcategory: 'jackets', 
+      image: 'https://cdn-images.farfetch-contents.com/17/81/19/24/17811924_37690679_600.jpg', 
+      new: true, 
+      rating: 5, 
+      sizes: ['M', 'L'],
+      description: 'แจ็คเก็ตหนังแท้สไตล์ไบค์เกอร์ ดีไซน์คลาสสิก เท่ห์สุดๆ ผลิตจากหนังวัวแท้คุณภาพเกรดพรีเมียม ตัดเย็บประณีต ซิปแข็งแรง มีซับในกันลม ใส่แล้วดูมีสไตล์ ทนทานมาก ยิ่งใช้ยิ่งสวย'
+    },
+    { 
+      id: 5, 
+      name: 'Classic Heels', 
+      price: 47.99, 
+      originalPrice: 79.99, 
+      category: 'women', 
+      subcategory: 'shoes', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLcV3dm4NlpW35gzMOtH-9XIZ6RTT6wBFUTw&s', 
+      sale: 40, 
+      rating: 4, 
+      sizes: ['36', '37', '38'],
+      description: 'รองเท้าส้นสูงคลาสสิก ส้นสูง 3 นิ้ว สวมใส่สบาย มีเบาะรองรับฝ่าเท้า วัสดุคุณภาพดี หนังแท้นิ่ม ทรงสวยเพรียว เสริมความมั่นใจ เหมาะกับทุกโอกาส ทั้งทำงานและงานปาร์ตี้'
+    },
 
-    // Men's
-    { id: 6, name: 'Classic Dress Shirt', price: 35.99, originalPrice: 59.99, category: 'men', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ90dbEVU7U63VdmWdM7XMFsiaSD3iaN3j7mA&s', sale: 40, rating: 5, sizes: ['M', 'L', 'XL'] },
-    { id: 7, name: 'Premium Denim Jeans', price: 79.99, category: 'men', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlarkCaVRRt1Zi16EMdt0oDFkFlpMOElfnpQ&s', new: true, rating: 5, sizes: ['M', 'L', 'XL'] },
-    { id: 8, name: 'Leather Jacket', price: 129.99, originalPrice: 199.99, category: 'men', image: 'https://images-cdn.ubuy.co.in/65a9738aa4a7283d7f7a7678-dtydtpe-leather-jacket-men-men-s-winter.jpg', sale: 35, rating: 4, sizes: ['L', 'XL'] },
+    // Men's Products
+    { 
+      id: 6, 
+      name: 'Classic Dress Shirt', 
+      price: 35.99, 
+      originalPrice: 59.99, 
+      category: 'men', 
+      subcategory: 'tops', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ90dbEVU7U63VdmWdM7XMFsiaSD3iaN3j7mA&s', 
+      sale: 40, 
+      rating: 5, 
+      sizes: ['M', 'L', 'XL'],
+      description: 'เสื้อเชิ้ตแขนยาวทางการ ผ้าคอตตอน 100% เนื้อละเอียด ระบายอากาศได้ดี ตัดเย็บเรียบร้อย ทรงสวย ใส่สบาย เหมาะสำหรับทำงานออฟฟิศหรืองานสำคัญ ดูดีมีระดับ รีดง่าย ไม่ยับง่าย'
+    },
+    { 
+      id: 7, 
+      name: 'Premium Denim Jeans', 
+      price: 79.99, 
+      category: 'men', 
+      subcategory: 'pants', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlarkCaVRRt1Zi16EMdt0oDFkFlpMOElfnpQ&s', 
+      new: true, 
+      rating: 5, 
+      sizes: ['M', 'L', 'XL'],
+      description: 'กางเกงยีนส์เดนิมพรีเมียม ผ้าคุณภาพสูงจากญี่ปุ่น ทรงสวยเข้ารูปพอดี ไม่คับ ใส่สบาย เนื้อผ้าทนทานมาก ซักได้ไม่หลุดจาง ดีไซน์เรียบหรู เท่ห์สุดๆ เหมาะกับทุกโอกาส'
+    },
+    { 
+      id: 8, 
+      name: 'Leather Jacket', 
+      price: 129.99, 
+      originalPrice: 199.99, 
+      category: 'men', 
+      subcategory: 'jackets', 
+      image: 'https://images-cdn.ubuy.co.in/65a9738aa4a7283d7f7a7678-dtydtpe-leather-jacket-men-men-s-winter.jpg', 
+      sale: 35, 
+      rating: 4, 
+      sizes: ['L', 'XL'],
+      description: 'แจ็คเก็ตหนังแท้สำหรับผู้ชาย สไตล์เท่ห์ ดีไซน์คลาสสิก ผลิตจากหนังวัวแท้คุณภาพเกรด A ตัดเย็บอย่างประณีตด้วยช่างฝีมือ มีซับในกันหนาว กันลม ใส่แล้วดูดี มีสไตล์ ทนทานใช้ได้นานหลายปี'
+    },
 
-    // Kids
-    { id: 9, name: 'Cartoon T-Shirt Set', price: 17.99, originalPrice: 29.99, category: 'kids', image: 'data:image/jpeg;base64,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', sale: 40, rating: 5, sizes: ['XS', 'S', 'M'] },
-    { id: 10, name: 'Princess Party Dress', price: 34.99, category: 'kids', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTCAStuUsiizRZjYMDqT3VnU2mexnvANsXOQ&s', new: true, rating: 5, sizes: ['XS', 'S'] },
-    { id: 11, name: 'Denim Jeans', price: 19.99, originalPrice: 30.99, category: 'kids', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIYK4wHimv9dsmLoDGQ3q81i27vdF07HtUtQ&s', sale: 35, rating: 4, sizes: ['XS', 'S', 'M'] },
+    // Kids' Products
+    { 
+      id: 9, 
+      name: 'Cartoon T-Shirt Set', 
+      price: 17.99, 
+      originalPrice: 29.99, 
+      category: 'kids', 
+      subcategory: 'tops', 
+      image: 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500', 
+      sale: 40, 
+      rating: 5, 
+      sizes: ['XS', 'S', 'M'],
+      description: 'ชุดเสื้อยืดเด็กลายการ์ตูนน่ารัก ผ้าคอตตอน 100% นุ่มสบาย ระบายอากาศได้ดี สีสดไม่หลุดลอก ปลอดภัยสำหรับเด็ก พิมพ์ลายคมชัด สีสวย เด็กๆ ชอบมากค่ะ ซักง่าย แห้งไว'
+    },
+    { 
+      id: 10, 
+      name: 'Princess Party Dress', 
+      price: 34.99, 
+      category: 'kids', 
+      subcategory: 'tops', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTCAStuUsiizRZjYMDqT3VnU2mexnvANsXOQ&s', 
+      new: true, 
+      rating: 5, 
+      sizes: ['XS', 'S'],
+      description: 'ชุดเดรสเจ้าหญิงสำหรับงานปาร์ตี้ ผ้าซาตินเนื้อนุ่ม ตกแต่งด้วยลูกไม้ประดับเลื่อม สวยหรูระดับพรีเมียม ตัดเย็บประณีต เนื้อผ้าคุณภาพดี ใส่แล้วลูกสาวน่ารักมาก เหมาะสำหรับงานวันเกิด งานแต่งงาน หรืองานสำคัญ'
+    },
+    { 
+      id: 11, 
+      name: 'Denim Jeans', 
+      price: 19.99, 
+      originalPrice: 30.99, 
+      category: 'kids', 
+      subcategory: 'pants', 
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIYK4wHimv9dsmLoDGQ3q81i27vdF07HtUtQ&s', 
+      sale: 35, 
+      rating: 4, 
+      sizes: ['XS', 'S', 'M'],
+      description: 'กางเกงยีนส์เด็ก เนื้อผ้าคอตตอนผสมสแปนเด็กซ์ ยืดหยุ่นได้ดี สวมใส่สบาย ไม่เข็ดขัด ทนทาน ทรงสวย ซักได้ ไม่หดไม่ย้วย มีกระเป๋าใช้งานได้จริง เหมาะสำหรับเด็กวัยเรียน ใส่ไปโรงเรียนหรือเที่ยวก็เท่ห์'
+    },
+
+    // Additional Products
+    { 
+      id: 12, 
+      name: 'Striped Casual Shirt', 
+      price: 24.99, 
+      category: 'men', 
+      subcategory: 'tops', 
+      image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500', 
+      new: true, 
+      rating: 4, 
+      sizes: ['M', 'L', 'XL'],
+      description: 'เสื้อเชิ้ตลายทางแนวเท่ๆ ผ้าคอตตอนผสมลินิน เนื้อบาง ระบายอากาศได้ดี เหมาะกับอากาศร้อน สีสวยไม่จาง ใส่ไปทำงานหรือเที่ยวก็ดูดี มีสไตล์ ซักง่าย ไม่ต้องรีด'
+    },
+    { 
+      id: 13, 
+      name: 'Maxi Flowy Skirt', 
+      price: 38.99, 
+      originalPrice: 55.99, 
+      category: 'women', 
+      subcategory: 'skirts', 
+      image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=500', 
+      sale: 30, 
+      rating: 5, 
+      sizes: ['S', 'M', 'L'],
+      description: 'กระโปรงยาวผ้าชีฟอง โปร่งบางพริ้วสวย สวมใส่สบาย เดินลุย เหมาะกับสาวๆ ที่ชอบลุคสบายๆ แต่มีสไตล์ ใส่ไปเที่ยวทะเล ไปงานเลี้ยง หรือใส่เที่ยวทั่วไปก็สวยดูดีมีระดับ'
+    },
+    { 
+      id: 14, 
+      name: 'Sport Sneakers', 
+      price: 59.99, 
+      category: 'men', 
+      subcategory: 'shoes', 
+      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500', 
+      new: true, 
+      rating: 5, 
+      sizes: ['40', '41', '42', '43'],
+      description: 'รองเท้าผ้าใบกีฬา ดีไซน์สปอร์ต พื้นนุ่มรองรับแรงกระแทกได้ดี เหมาะสำหรับวิ่ง ออกกำลังกาย หรือใส่เที่ยวก็ได้ วัสดุคุณภาะดี ระบายอากาศได้ดี น้ำหนักเบา สวมใส่สบายมาก'
+    },
+    { 
+      id: 15, 
+      name: 'Cute Backpack', 
+      price: 22.99, 
+      originalPrice: 35.99, 
+      category: 'kids', 
+      subcategory: 'accessories', 
+      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500', 
+      sale: 36, 
+      rating: 4, 
+      sizes: ['One Size'],
+      description: 'กระเป๋าสะพายหลังเด็ก ลายการ์ตูนน่ารัก ขนาดพอดี เหมาะสำหรับเด็กอนุบาล-ประถม ช่องใส่ของเยอะ มีช่องใส่ขวดน้ำ สายสะพายนุ่ม ปรับระดับได้ วัสดุคุณภาพดี ทนทาน กันน้ำได้ระดับหนึ่ง'
+    }
   ];
 
   constructor() { }
@@ -53,9 +237,12 @@ export class ProductService {
 
   searchProducts(query: string): Observable<Product[]> {
     const q = query.trim().toLowerCase();
-    if (!q) {
-      return of([]);
-    }
-    return of(this.products.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+    if (!q) return of([]);
+    return of(this.products.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.category.toLowerCase().includes(q) ||
+      (p.subcategory && p.subcategory.toLowerCase().includes(q)) ||
+      (p.description && p.description.toLowerCase().includes(q))
+    ));
   }
 }

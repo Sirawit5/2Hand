@@ -2,46 +2,72 @@
 <div class="checkout-container">
   <div class="left">
     <h3>ที่อยู่สำหรับจัดส่ง</h3>
+
+    <!-- เลือกจากที่อยู่ที่บันทึกไว้ -->
+    <div class="saved-addresses" *ngIf="savedAddresses.length > 0 && !editingAddress">
+      <label>เลือกที่อยู่ที่บันทึกไว้:</label>
+      <select [(ngModel)]="selectedAddressId" (ngModelChange)="onAddressSelect($event)" class="address-select">
+        <option [value]="null">-- เลือกที่อยู่ --</option>
+        <option *ngFor="let addr of savedAddresses" [value]="addr.id">
+          {{ addr.name }} - {{ addr.line1 }}
+        </option>
+      </select>
+    </div>
+
     <div class="address-card">
       <div *ngIf="!editingAddress">
-        <p>{{ addressObj.line1 || '-' }}</p>
+        <p><strong>{{ addressObj.line1 || 'ยังไม่มีที่อยู่' }}</strong></p>
         <p *ngIf="addressObj.line2">{{ addressObj.line2 }}</p>
         <p *ngIf="addressObj.city">{{ addressObj.city }} {{ addressObj.postcode }}</p>
-        <p *ngIf="addressObj.phone">เบอร์โทรศัพท์: {{ addressObj.phone }}</p>
-        <!-- Thai formatted single-line address for convenience -->
+        <p *ngIf="addressObj.phone">📞 {{ addressObj.phone }}</p>
        
         <div class="address-actions">
-          <button (click)="editAddress()">แก้ไขที่อยู่</button>
+          <button (click)="editAddress()">✏️ แก้ไขที่อยู่</button>
+          <button *ngIf="selectedAddressId" (click)="deleteSelectedAddress()" class="delete-btn">
+            🗑️ ลบที่อยู่
+          </button>
         </div>
       </div>
+
       <div *ngIf="editingAddress" class="address-form">
-        <label>ที่อยู่ (บรรทัด 1)
-          <input [(ngModel)]="addressObj.line1" />
+        <label>ที่อยู่ (บรรทัด 1) *
+          <input [(ngModel)]="addressObj.line1" placeholder="เลขที่ ถนน" required />
         </label>
         <label>บรรทัด 2
-          <input [(ngModel)]="addressObj.line2" />
+          <input [(ngModel)]="addressObj.line2" placeholder="แขวง/ตำบล" />
         </label>
         <label>จังหวัด/อำเภอ
-          <input [(ngModel)]="addressObj.city" />
+          <input [(ngModel)]="addressObj.city" placeholder="เขต/อำเภอ จังหวัด" />
         </label>
         <label>รหัสไปรษณีย์
-          <input [(ngModel)]="addressObj.postcode" />
+          <input [(ngModel)]="addressObj.postcode" placeholder="10100" maxlength="5" />
         </label>
-        <label>เบอร์โทร
-          <input [(ngModel)]="addressObj.phone" />
+        <label>เบอร์โทร *
+          <input [(ngModel)]="addressObj.phone" placeholder="0XX-XXX-XXXX" required />
         </label>
         <div class="address-actions">
-          <button (click)="saveAddress()">บันทึกที่อยู่</button>
+          <button (click)="saveAddress()">💾 บันทึกที่อยู่</button>
+          <button (click)="editingAddress = false" class="cancel-btn">❌ ยกเลิก</button>
         </div>
       </div>
     </div>
 
     <h3>ช่องทางการชำระเงิน</h3>
-      <div class="payment-options">
-      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="bank_transfer" /> โอนเงินธนาคาร</label>
-      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="cod" /> ชำระเงินปลายทาง</label>
-      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="qr" /> สแกน QR</label>
+    <div class="payment-options">
+      <label>
+        <input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="bank_transfer" />
+        🏦 โอนเงินธนาคาร
+      </label>
+      <label>
+        <input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="cod" />
+        💵 ชำระเงินปลายทาง
+      </label>
+      <label>
+        <input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="qr" />
+        📱 สแกน QR
+      </label>
     </div>
+
     <div *ngIf="paymentMethod === 'qr'" class="qr-code">
       <p>สแกนเพื่อชำระเงิน</p>
       <div class="qr-preview">
@@ -51,35 +77,81 @@
     </div>
   </div>
 
+  <!-- Order Summary Section -->
   <div class="right">
     <h3>สรุปคำสั่งซื้อ</h3>
     <div class="order-summary">
+      <!-- รายการสินค้า -->
       <div class="item" *ngFor="let it of items">
-        <div class="thumb">{{ it.product.image }}</div>
+        <div class="thumb">
+          <img [src]="it.product.image" [alt]="it.product.name" />
+        </div>
+        
         <div class="meta">
           <div class="name">{{ it.product.name }}</div>
+          
+          <!-- Size Selector -->
           <div *ngIf="it.product.sizes?.length" class="size-select">
             <label>ขนาด</label>
             <select [(ngModel)]="it.size" (ngModelChange)="updateSizeFor(it, $event)">
               <option *ngFor="let s of it.product.sizes" [value]="s">{{ s }}</option>
             </select>
           </div>
+          
+          <!-- Quantity Control -->
           <div class="qty-control">
             <label>จำนวน</label>
             <div class="qty-controls">
-              <input type="number" [(ngModel)]="it.quantity" min="1" step="1" inputmode="numeric" (ngModelChange)="updateQuantityFor(it, $event)" />
+              <input 
+                type="number" 
+                [(ngModel)]="it.quantity" 
+                min="1" 
+                step="1" 
+                inputmode="numeric" 
+                (ngModelChange)="updateQuantityFor(it, $event)" />
             </div>
           </div>
         </div>
+        
         <div class="price">฿{{ (it.product.price * (it.quantity || 1)).toFixed(2) }}</div>
       </div>
 
-      <div class="summary-line"><span>ยอดรวมย่อย</span><span>฿{{ subtotal.toFixed(2) }}</span></div>
-      <div class="summary-line"><span>ค่าธรรมเนียม</span><span>฿{{ marketplaceFee.toFixed(2) }}</span></div>
-      <div class="summary-total"><span>ยอดที่ต้องชำระ</span><span>฿{{ total.toFixed(2) }}</span></div>
+      <!-- ถ้าไม่มีสินค้า -->
+      <div *ngIf="items.length === 0" class="empty-cart-message">
+        <p>ไม่มีสินค้าในตะกร้า</p>
+        <a routerLink="/" class="shop-link">🛍️ เลือกซื้อสินค้า</a>
+      </div>
 
-      <div class="actions">
-        <button class="place-order" (click)="confirmOrder()">ยืนยันการสั่งซื้อ</button>
+      <!-- Summary Lines -->
+      <div *ngIf="items.length > 0">
+        <div class="summary-line">
+          <span>ยอดรวมย่อย</span>
+          <span>฿{{ subtotal.toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-line">
+          <span>ค่าจัดส่ง</span>
+          <span>{{ shipping === 0 ? 'ฟรี' : '฿' + shipping.toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-line" *ngIf="marketplaceFee > 0">
+          <span>ค่าธรรมเนียม</span>
+          <span>฿{{ marketplaceFee.toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-total">
+          <span>ยอดที่ต้องชำระ</span>
+          <span>฿{{ total.toFixed(2) }}</span>
+        </div>
+
+        <div class="actions">
+          <button 
+            class="place-order" 
+            (click)="confirmOrder()"
+            [disabled]="items.length === 0 || !paymentMethod || !addressObj.line1">
+            ยืนยันการสั่งซื้อ
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService, CartItem } from '../services/cart.service';
 import { Router } from '@angular/router';
-import { Product, ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-cart',
@@ -15,22 +14,46 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: CartService, 
-    private router: Router,
-    private productService: ProductService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.cartService.cart$.subscribe(data => {
       this.items = data;
-      this.total = this.items.reduce((sum, c) => sum + (c.product.price * (c.quantity || 1)), 0);
+      this.calculateTotal();
     });
   }
 
-  removeItem(id: number) {
+  calculateTotal(): void {
+    this.total = this.items.reduce((sum, item) => {
+      return sum + (item.product.price * (item.quantity || 1));
+    }, 0);
+  }
+
+  removeItem(id: number): void {
     this.cartService.removeFromCart(id);
   }
 
-  checkout() {
+  updateQuantity(item: CartItem, quantity: number): void {
+    if (quantity < 1) return;
+    item.quantity = quantity;
+    this.calculateTotal();
+  }
+
+  incrementQuantity(item: CartItem): void {
+    item.quantity = (item.quantity || 1) + 1;
+    this.calculateTotal();
+  }
+
+  decrementQuantity(item: CartItem): void {
+    if ((item.quantity || 1) > 1) {
+      item.quantity = (item.quantity || 1) - 1;
+      this.calculateTotal();
+    }
+  }
+
+  checkout(): void {
+    if (this.items.length === 0) return;
     this.router.navigate(['/checkout']);
   }
 }

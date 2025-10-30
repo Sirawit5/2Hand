@@ -1,38 +1,80 @@
 <app-navbar></app-navbar>
 
-<div class="product-detail">
+<div class="product-detail" *ngIf="product">
+  <!-- Left Section - Image -->
   <div class="left">
     <div class="product-image">
-      <!-- แสดงรูปภาพโดยใช้ [src] สำหรับ binding -->
-      <img [src]="product?.image" alt="{{product?.name}}" class="image-inner" />
+      <img [src]="product.image" 
+           [alt]="product.name" 
+           class="image-inner" 
+           onerror="this.src='assets/images/placeholder.jpg'" />
       <div class="icons">
-        <button (click)="toggleSave()" class="heart-btn">{{ isSaved() ? '♥' : '♡' }}</button>
-        <button class="bookmark">🔖</button>
+        <button (click)="toggleSave()" 
+                class="heart-btn"
+                [class.saved]="isSaved()"
+                [attr.aria-label]="isSaved() ? 'ลบออกจากรายการโปรด' : 'เพิ่มในรายการโปรด'">
+          {{ isSaved() ? '♥' : '♡' }}
+        </button>
+        <button class="bookmark" aria-label="บุ๊คมาร์ก">🔖</button>
       </div>
     </div>
   </div>
 
-  <div class="product-info right">
-    <h2 class="product-name">{{ product?.name }}</h2>
-    <div class="product-price">฿{{ product?.price }}</div>
+  <!-- Right Section - Info -->
+  <div class="right product-info">
+    <h2 class="product-name">{{ product.name }}</h2>
+       <!-- Description (optional) -->
+    <div class="description" *ngIf="product.description">
+      <h3>รายละเอียดสินค้า</h3>
+      <p>{{ product.description }}</p>
+    </div>
+    <div class="product-price">
+      ฿{{ product.price | number:'1.2-2' }}
+      <span class="original-price" *ngIf="product.originalPrice">
+        ฿{{ product.originalPrice | number:'1.2-2' }}
+      </span>
+    </div>
 
-    <div *ngIf="product?.sizes?.length" class="sizes-row">
+    <!-- Rating -->
+    <div class="rating" *ngIf="product.rating">
+      <span class="stars">⭐ {{ product.rating }}/5</span>
+    </div>
+
+    <!-- Sizes -->
+    <div *ngIf="product.sizes && product.sizes.length > 0" class="sizes-row">
       <label>ขนาด:</label>
       <div class="sizes">
-        <button *ngFor="let s of product?.sizes" [class.active]="s===selectedSize" (click)="selectedSize = s">{{ s }}</button>
+        <button *ngFor="let s of product.sizes" 
+                [class.active]="s === selectedSize" 
+                (click)="selectedSize = s">
+          {{ s }}
+        </button>
       </div>
     </div>
 
+    <!-- Quantity -->
     <div class="qty-row">
-      <label>จำนวน :</label>
+      <label>จำนวน:</label>
       <div class="qty">
-        <input type="number" [(ngModel)]="quantity" min="1" />
+        <button class="qty-btn" (click)="decrement()">−</button>
+        <input type="number" 
+               [(ngModel)]="quantity" 
+               min="1" 
+               max="99" />
+        <button class="qty-btn" (click)="increment()">+</button>
       </div>
     </div>
 
+    <!-- Actions -->
     <div class="product-actions">
       <button class="view-btn" (click)="buyNow()">ซื้อเลย</button>
       <button class="add" (click)="addToBag()">เพิ่มลงตะกร้า</button>
     </div>
-  </div>
+
+ 
+</div>
+
+<!-- Loading State -->
+<div class="loading" *ngIf="!product">
+  <p>กำลังโหลด...</p>
 </div>
