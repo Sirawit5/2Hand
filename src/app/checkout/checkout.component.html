@@ -2,18 +2,6 @@
 <div class="checkout-container">
   <div class="left">
     <h3>ที่อยู่สำหรับจัดส่ง</h3>
-
-    <!-- เลือกจากที่อยู่ที่บันทึกไว้ -->
-    <div class="saved-addresses" *ngIf="savedAddresses.length > 0 && !editingAddress">
-      <label>เลือกที่อยู่ที่บันทึกไว้:</label>
-      <select [(ngModel)]="selectedAddressId" (ngModelChange)="onAddressSelect($event)" class="address-select">
-        <option [value]="null">-- เลือกที่อยู่ --</option>
-        <option *ngFor="let addr of savedAddresses" [value]="addr.id">
-          {{ addr.name }} - {{ addr.line1 }}
-        </option>
-      </select>
-    </div>
-
     <div class="address-card">
       <div *ngIf="!editingAddress">
         <p><strong>{{ addressObj.line1 || 'ยังไม่มีที่อยู่' }}</strong></p>
@@ -156,3 +144,4 @@
     </div>
   </div>
 </div>
+<app-footer></app-footer>

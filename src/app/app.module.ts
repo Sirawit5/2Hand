@@ -19,6 +19,7 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     BreadcrumbComponent,
   NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent, CartComponent, ProfileComponent, CheckoutComponent, OrderSuccessComponent, SearchResultsComponent,
   ProductDetailComponent,
+  FooterComponent,
   ],
   imports: [
     BrowserModule,
