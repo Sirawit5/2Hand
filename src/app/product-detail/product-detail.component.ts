@@ -13,6 +13,7 @@ import { FavoritesService } from '../services/favorites.service';
 export class ProductDetailComponent implements OnInit {
   product?: Product;
   selectedSize = '';
+  quantity = 1;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,13 +34,13 @@ export class ProductDetailComponent implements OnInit {
 
   addToBag() {
     if (!this.product) return;
-    this.cartService.addToCart(this.product);
-    alert(`${this.product.name} added to bag.`);
+    this.cartService.addToCart(this.product, this.quantity, this.selectedSize || undefined);
+    alert(`${this.product.name} (x${this.quantity}) added to bag.`);
   }
 
   buyNow() {
     if (!this.product) return;
-    this.cartService.addToCart(this.product);
+    this.cartService.addToCart(this.product, this.quantity, this.selectedSize || undefined);
     this.router.navigate(['/checkout']);
   }
 
@@ -50,5 +51,13 @@ export class ProductDetailComponent implements OnInit {
 
   isSaved(): boolean {
     return !!this.product && this.favService.isSaved(this.product.id);
+  }
+
+  decrement() {
+    this.quantity = Math.max(1, (this.quantity || 1) - 1);
+  }
+
+  increment() {
+    this.quantity = (this.quantity || 1) + 1;
   }
 }

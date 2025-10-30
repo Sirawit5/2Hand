@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product, ProductService } from '../services/product.service';
 import { CartService } from '../services/cart.service';
 import { FavoritesService } from '../services/favorites.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -16,6 +17,8 @@ export class SearchResultsComponent implements OnInit {
   displayed: Product[] = [];
   selectedSize = 'all';
   sortOrder: 'none' | 'asc' | 'desc' = 'none';
+  savedIds = new Set<number>();
+  private favSub?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +28,10 @@ export class SearchResultsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // subscribe to favorites id list for fast O(1) checks and optimistic UI
+    this.favSub = this.favService.favIds$.subscribe(ids => {
+      this.savedIds = new Set(ids || []);
+    });
     this.route.queryParams.subscribe(params => {
       this.query = params['q'] || '';
       if (this.query) {
@@ -34,6 +41,10 @@ export class SearchResultsComponent implements OnInit {
       }
       this.applyFilters();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.favSub?.unsubscribe();
   }
 
   applyFilters() {
@@ -54,10 +65,16 @@ export class SearchResultsComponent implements OnInit {
   }
 
   toggleSave(p: Product) {
+    // optimistic update for UI responsiveness
+    if (this.savedIds.has(p.id)) {
+      this.savedIds.delete(p.id);
+    } else {
+      this.savedIds.add(p.id);
+    }
     this.favService.toggle(p);
   }
 
   isSaved(p: Product) {
-    return this.favService.isSaved(p.id);
+    return this.savedIds.has(p.id);
   }
 }

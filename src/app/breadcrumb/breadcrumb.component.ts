@@ -15,7 +15,7 @@ export class BreadcrumbComponent implements OnInit {
   constructor(private router: Router, private productService: ProductService) {}
 
   ngOnInit(): void {
-    // build for initial url
+
     this.buildBreadcrumbs(this.router.url);
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: any) => {
       this.buildBreadcrumbs(e.urlAfterRedirects || e.url);
@@ -24,6 +24,24 @@ export class BreadcrumbComponent implements OnInit {
 
   private titleCase(s: string) {
     return s.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  // Translate some common route/category labels to Thai for the breadcrumb.
+  translateLabel(label: string): string {
+    if (!label) return label;
+    const map: Record<string, string> = {
+      'home': 'หน้าแรก',
+      'women': 'ผู้หญิง',
+      'men': 'ผู้ชาย',
+      'kids': 'เด็ก',
+      'about': 'เกี่ยวกับเรา',
+      'cart': 'ตะกร้า',
+      'profile': 'โปรไฟล์',
+      'checkout': 'ชำระเงิน',
+      'orders': 'คำสั่งซื้อ'
+    };
+    const key = label.trim().toLowerCase();
+    return map[key] || label;
   }
 
   private buildBreadcrumbs(url: string) {
@@ -36,7 +54,7 @@ export class BreadcrumbComponent implements OnInit {
         const crumbs: Array<{ label: string; url: string }> = [];
         if (p) {
           // category crumb (links back to category listing)
-          crumbs.push({ label: this.titleCase(p.category), url: `/${p.category}` });
+          crumbs.push({ label: this.translateLabel(this.titleCase(p.category)), url: `/${p.category}` });
           // product name as last crumb (not typically a link but we'll include URL)
           crumbs.push({ label: p.name, url: `/product/${id}` });
         } else {
@@ -53,7 +71,7 @@ export class BreadcrumbComponent implements OnInit {
       const part = parts[i];
       acc += '/' + part;
       const label = /^\d+$/.test(part) ? `#${part}` : this.titleCase(decodeURIComponent(part));
-      crumbs.push({ label, url: acc });
+      crumbs.push({ label: this.translateLabel(label), url: acc });
     }
     this.breadcrumbs = crumbs;
   }

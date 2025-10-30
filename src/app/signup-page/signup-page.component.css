@@ -32,6 +32,7 @@ body {
   top: 10%;
   left: 5%;
   animation: float 25s ease-in-out infinite;
+  will-change: transform;
   pointer-events: none;
 }
 
@@ -43,6 +44,7 @@ body {
   bottom: 15%;
   right: 8%;
   animation: float 20s ease-in-out infinite reverse;
+  will-change: transform;
   pointer-events: none;
 }
 
@@ -107,6 +109,7 @@ body {
     inset 0 -2px 4px rgba(0, 0, 0, 0.1);
   border: 4px solid rgba(255, 255, 255, 1);
   animation: logoFloat 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes logoFloat {
@@ -192,7 +195,7 @@ body {
   font-size: 1rem;
   color: #1d1d1f;
   font-family: inherit;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
@@ -234,7 +237,7 @@ body {
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s ease;
   box-shadow: 
     0 8px 24px rgba(102, 126, 234, 0.4),
     0 2px 8px rgba(102, 126, 234, 0.3),
@@ -258,7 +261,10 @@ body {
     transparent, 
     rgba(255, 255, 255, 0.4), 
     transparent);
-  transition: left 0.6s ease;
+  /* use transform for smoother motion */
+  left: 0;
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
 }
 
 .sign-up-btn::after {
@@ -268,7 +274,7 @@ body {
   top: 50%;
   transform: translateY(-50%) translateX(0);
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   font-size: 1.25rem;
 }
 
@@ -282,7 +288,7 @@ body {
 }
 
 .sign-up-btn:hover::before {
-  left: 100%;
+  transform: translateX(100%);
 }
 
 .sign-up-btn:hover::after {

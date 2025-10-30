@@ -1,20 +1,20 @@
 <app-navbar></app-navbar>
 
-<h2>Featured Products</h2>
+<h2>สินค้าแนะนำ</h2>
 
 <div class="filters">
-  <label>Size: 
+  <label>ขนาด: 
     <select [(ngModel)]="selectedSize" (change)="applyFilters()">
-      <option value="all">All</option>
+      <option value="all">ทั้งหมด</option>
       <option *ngFor="let s of ['S','M','L','36','37','38','XS']" [value]="s">{{s}}</option>
     </select>
   </label>
   
-  <label>Sort: 
+  <label>จัดเรียง: 
     <select [(ngModel)]="sortOrder" (change)="applyFilters()">
-      <option value="none">Default</option>
-      <option value="asc">Price: Low → High</option>
-      <option value="desc">Price: High → Low</option>
+      <option value="none">เริ่มต้น</option>
+      <option value="asc">ราคา: ต่ำ → สูง</option>
+      <option value="desc">ราคา: สูง → ต่ำ</option>
     </select>
   </label>
 </div>
@@ -26,13 +26,13 @@
     <div class="product-info">
       <div class="product-name">{{product.name}}</div>
       <div class="product-price">
-        ${{product.price}}
+        ฿{{product.price}}
         <span class="original-price" *ngIf="product.originalPrice">
-          ${{product.originalPrice}}
+          ฿{{product.originalPrice}}
         </span>
       </div>
       <div class="product-rating">⭐ {{product.rating}}/5</div>
-      <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
+      <a [routerLink]="['/product', product.id]" class="view-btn">ดูรายละเอียด</a>
     </div>
   </div>
 </div>

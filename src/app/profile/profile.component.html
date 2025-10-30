@@ -1,12 +1,38 @@
 <app-navbar></app-navbar>
 
 <div class="profile-container" *ngIf="user">
-  <h2>My Profile</h2>
-  <p><strong>Username:</strong> {{ user.username }}</p>
-  <p><strong>Email:</strong> {{ user.email }}</p>
+  <h2>โปรไฟล์ของฉัน</h2>
+  <div class="profile-card">
+    <div *ngIf="!editMode">
+      <p><strong>ชื่อ :</strong> {{ user.username }}</p>
+      <p><strong>E-mail:</strong> {{ user.email }}</p>
+      <p><strong>ที่อยู่:</strong> {{ user.address || '-' }}</p>
+      <p><strong>เบอร์โทรศัพท์:</strong> {{ user.phone || '-' }}</p>
+      <button (click)="enableEdit()">แก้ไขข้อมูลส่วนตัว</button>
+    </div>
+
+    <div *ngIf="editMode">
+      <label>ชื่อ:</label>
+      <input type="text" [(ngModel)]="editedUser.name" />
+
+      <label>อีเมล:</label>
+      <input type="email" [(ngModel)]="editedUser.email" />
+
+      <label>ที่อยู่:</label>
+      <textarea [(ngModel)]="editedUser.address"></textarea>
+
+      <label>เบอร์โทรศัพท์:</label>
+      <input type="text" [(ngModel)]="editedUser.phone" />
+
+      <div class="edit-actions">
+        <button (click)="saveProfile()">บันทึก</button>
+        <button (click)="cancelEdit()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
 
   <section class="saved">
-    <h3>Liked items</h3>
+    <h3>รายการที่ชอบ</h3>
     <div *ngIf="!saved || saved.length === 0">ยังไม่มีสินค้าที่ชอบ</div>
     <div class="saved-list">
       <div class="saved-card" *ngFor="let fav of saved">
@@ -14,30 +40,33 @@
         <div class="meta">
           <div class="name">{{ fav.product.name }}</div>
           <div class="price">${{ fav.product.price }}</div>
-          <div class="meta-small">Liked: {{ fav.likedAt }}</div>
+          <div class="meta-small">ถูกใจเมื่อ: {{ fav.likedAt }}</div>
         </div>
         <div class="actions">
-          <a [routerLink]="['/product', fav.product.id]">View</a>
-          <button (click)="removeSaved(fav.product.id)">♥ Remove</button>
+          <a [routerLink]="['/product', fav.product.id]">ดูรายละเอียด</a>
+          <button (click)="removeSaved(fav.product.id)">ลบออก ♥</button>
         </div>
       </div>
     </div>
   </section>
 
   <section class="orders">
-    <h3>Orders</h3>
+  <h3>คำสั่งซื้อ</h3>
     <div *ngIf="!orders || orders.length === 0">ยังไม่มีคำสั่งซื้อ</div>
     <div *ngFor="let o of orders" class="order-card">
-      <div><strong>Order #{{ o.id }}</strong> — {{ o.status }}</div>
-      <div class="order-items">
+      <div class="order-header" (click)="toggleOrder(o)" style="cursor:pointer">
+  <strong>คำสั่งซื้อที่ #{{ o.id }}</strong> — {{ o.status }}
+        <span style="float:right">{{ orderOpenSymbol(o) }}</span>
+      </div>
+      <div *ngIf="isOrderOpen(o)" class="order-items">
         <div *ngFor="let it of o.items" class="order-item">
           <span class="thumb">{{ it.product.image }}</span>
           <span class="name">{{ it.product.name }}</span>
           <span class="price">${{ it.product.price }}</span>
-          <span class="meta-small">Added: {{ it.addedAt }}</span>
+          <span class="meta-small">จำนวน: {{ it.quantity || 1 }}</span>
         </div>
       </div>
-      <div class="order-total">Total: ${{ o.total }}</div>
+  <div class="order-total">ยอดรวม: ${{ o.total }}</div>
     </div>
   </section>
 </div>

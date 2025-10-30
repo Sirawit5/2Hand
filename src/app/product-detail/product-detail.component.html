@@ -2,25 +2,36 @@
 
 <div class="product-detail">
   <div class="left">
-    <div class="image-card">
-      <div class="image">{{ product?.image }}</div>
+    <div class="product-image">
+      <div class="image-inner">{{ product?.image }}</div>
       <div class="icons">
-        <button (click)="toggleSave()" class="fav">{{ isSaved() ? '♥' : '♡' }}</button>
+        <button (click)="toggleSave()" class="heart-btn">{{ isSaved() ? '♥' : '♡' }}</button>
         <button class="bookmark">🔖</button>
       </div>
     </div>
   </div>
 
-  <div class="right">
-    <h2>{{ product?.name }}</h2>
-    <div class="price">${{ product?.price }}</div>
+  <div class="product-info right">
+    <h2 class="product-name">{{ product?.name }}</h2>
+    <div class="product-price">฿{{ product?.price }}</div>
 
-    <div *ngIf="product?.sizes?.length">
-      <label>Size:</label>
+    <div *ngIf="product?.sizes?.length" class="sizes-row">
+      <label>ขนาด:</label>
+      <div class="sizes">
+        <button *ngFor="let s of product?.sizes" [class.active]="s===selectedSize" (click)="selectedSize = s">{{ s }}</button>
+      </div>
     </div>
-    <div class="actions">
-      <button class="buy" (click)="buyNow()">Buy Now!</button>
-      <button class="add" (click)="addToBag()">Add to Cart</button>
+
+    <div class="qty-row">
+      <label>จำนวน :</label>
+      <div class="qty">
+        <input type="number" [(ngModel)]="quantity" min="1" />
+      </div>
+    </div>
+
+    <div class="product-actions">
+      <button class="view-btn" (click)="buyNow()">ซื้อเลย</button>
+      <button class="add" (click)="addToBag()">เพิ่มลงตะกร้า</button>
     </div>
   </div>
 </div>

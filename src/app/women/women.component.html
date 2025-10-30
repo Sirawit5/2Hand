@@ -1,38 +1,38 @@
 <app-navbar></app-navbar>
-<h2>👗 Women's Collection</h2>
+<h2>👗 คอลเลคชันสำหรับผู้หญิง</h2>
 
 <div class="filters">
-  <label>Size:
+  <label>ขนาด:
     <select [(ngModel)]="selectedSize" (change)="applyFilters()">
-      <option value="all">All</option>
+      <option value="all">ทั้งหมด</option>
       <option *ngFor="let s of ['S','M','L','36','37','38']" [value]="s">{{s}}</option>
     </select>
   </label>
-  <label>Sort:
+  <label>จัดเรียง:
     <select [(ngModel)]="sortOrder" (change)="applyFilters()">
-      <option value="none">Default</option>
-      <option value="asc">Price: Low → High</option>
-      <option value="desc">Price: High → Low</option>
+      <option value="none">เริ่มต้น</option>
+      <option value="asc">ราคา: ต่ำ → สูง</option>
+      <option value="desc">ราคา: สูง → ต่ำ</option>
     </select>
   </label>
 </div>
 
   <div class="product-grid">
-  <div class="product-card" *ngFor="let product of displayed">
+  <div class="product-card" *ngFor="let product of displayed; trackBy: trackByProduct">
     <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
     <div class="product-image">{{product.image}}</div>
     <div class="product-info">
       <div class="product-name">{{product.name}}</div>
       <div class="product-price">
-        ${{product.price}}
+        ฿{{product.price}}
         <span class="original-price" *ngIf="product.originalPrice">
-          ${{product.originalPrice}}
+          ฿{{product.originalPrice}}
         </span>
       </div>
       <div class="product-rating">⭐ {{product.rating}}/5</div>
       <div class="product-actions">
-        <a [routerLink]="['/product', product.id]" class="view-btn">View</a>
-        <button (click)="toggleSave(product)" class="heart-btn">{{ isSaved(product) ? '♥' : '♡' }}</button>
+        <a [routerLink]="['/product', product.id]" class="view-btn">ดูรายละเอียด</a>
+        <button (click)="toggleSave(product)" class="heart-btn">{{ savedIds.has(product.id) ? '♥' : '♡' }}</button>
       </div>
     </div>
   </div>

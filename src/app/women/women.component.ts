@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product, ProductService } from '../services/product.service';
 import { CartService } from '../services/cart.service';
 import { FavoritesService } from '../services/favorites.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-women',
@@ -14,6 +15,8 @@ export class WomenComponent implements OnInit {
   displayed: Product[] = [];
   selectedSize = 'all';
   sortOrder: 'none' | 'asc' | 'desc' = 'none';
+  savedIds = new Set<number>();
+  private favSub?: Subscription;
 
   constructor(
     private productService: ProductService,
@@ -26,6 +29,15 @@ export class WomenComponent implements OnInit {
       this.products = data;
       this.applyFilters();
     });
+    this.favSub = this.favService.favIds$.subscribe(ids => this.savedIds = new Set(ids || []));
+  }
+
+  ngOnDestroy(): void {
+    this.favSub?.unsubscribe();
+  }
+
+  trackByProduct(_index: number, item: Product) {
+    return item?.id;
   }
 
   applyFilters() {
@@ -46,10 +58,12 @@ export class WomenComponent implements OnInit {
   }
 
   toggleSave(p: Product) {
+    // optimistic UI update
+    if (this.savedIds.has(p.id)) this.savedIds.delete(p.id); else this.savedIds.add(p.id);
     this.favService.toggle(p);
   }
 
   isSaved(p: Product) {
-    return this.favService.isSaved(p.id);
+    return this.savedIds.has(p.id);
   }
 }

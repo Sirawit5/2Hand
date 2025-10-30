@@ -12,11 +12,13 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { AboutUSComponent } from './about-us/about-us.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'women', component: WomenComponent },
   { path: 'men', component: MenComponent },
+  { path: 'about', component: AboutUSComponent },
   { path: 'kids', component: KidsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },

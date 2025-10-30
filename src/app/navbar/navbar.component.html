@@ -4,30 +4,30 @@
       <a routerLink="/home" class="logo">2HShop</a>
 
       <div class="search-box">
-        <input type="search" placeholder="Search for products..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
-        <button class="search-btn" (click)="onSearch()">Search</button>
+        <input type="search" placeholder="ค้นหาสินค้า..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+        <button class="search-btn" (click)="onSearch()">ค้นหา</button>
       </div>
 
       <div class="auth-buttons" *ngIf="!isLoggedIn">
-        <button routerLink="/login">Log In</button>
-        <button routerLink="/signup">Sign Up</button>
+        <button routerLink="/login">เข้าสู่ระบบ</button>
+        <button routerLink="/signup">สมัครสมาชิก</button>
       </div>
 
       <div class="profile-menu" *ngIf="isLoggedIn">
-        <span class="welcome-text">Hi, {{ username }}</span>
-        <button class="cart-btn" routerLink="/cart">Cart <span class="cart-badge" *ngIf="cartCount">{{ cartCount }}</span></button>
+  <span class="welcome-text">สวัสดี, {{ username }}</span>
+  <button class="cart-btn" routerLink="/cart">ตะกร้า <span class="cart-badge" *ngIf="cartCount">{{ cartCount }}</span></button>
         <button class="profile-btn" routerLink="/profile"></button>
-        <button class="logout-btn" (click)="logout()" title="Logout"></button>
+  <button class="logout-btn" (click)="logout()" title="ออกจากระบบ"></button>
       </div>
     </div>
 
     <div class="bottom-row">
       <ul class="nav-links">
-        <li><a routerLink="/home">Home</a></li>
-        <li><a routerLink="/women">Women</a></li>
-        <li><a routerLink="/men">Men</a></li>
-        <li><a routerLink="/kids">Kids</a></li>
-        <li><a routerLink="/about">About</a></li>
+  <li><a routerLink="/home">หน้าแรก</a></li>
+  <li><a routerLink="/women">ผู้หญิง</a></li>
+  <li><a routerLink="/men">ผู้ชาย</a></li>
+  <li><a routerLink="/kids">เด็ก</a></li>
+  <li><a routerLink="/about">เกี่ยวกับเรา</a></li>
       </ul>
     </div>
     <app-breadcrumb></app-breadcrumb>

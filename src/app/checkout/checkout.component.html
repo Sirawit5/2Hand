@@ -1,16 +1,17 @@
 <app-navbar></app-navbar>
 <div class="checkout-container">
   <div class="left">
-    <h3>ที่อยู่จัดส่ง</h3>
+    <h3>ที่อยู่สำหรับจัดส่ง</h3>
     <div class="address-card">
       <div *ngIf="!editingAddress">
-        <p>{{ addressObj.line1 }}</p>
+        <p>{{ addressObj.line1 || '-' }}</p>
         <p *ngIf="addressObj.line2">{{ addressObj.line2 }}</p>
         <p *ngIf="addressObj.city">{{ addressObj.city }} {{ addressObj.postcode }}</p>
-        <p *ngIf="addressObj.phone">เบอร์โทรศัพท์ {{ addressObj.phone }}</p>
+        <p *ngIf="addressObj.phone">เบอร์โทรศัพท์: {{ addressObj.phone }}</p>
+        <!-- Thai formatted single-line address for convenience -->
+        <p *ngIf="thaiAddress"><strong>ที่อยู่ (ภาษาไทย):</strong> {{ thaiAddress }}</p>
         <div class="address-actions">
           <button (click)="editAddress()">แก้ไขที่อยู่</button>
-          <button (click)="saveAddress()">เพิ่มที่อยู่</button>
         </div>
       </div>
       <div *ngIf="editingAddress" class="address-form">
@@ -30,15 +31,23 @@
           <input [(ngModel)]="addressObj.phone" />
         </label>
         <div class="address-actions">
-          <button (click)="saveAddress()">บันทึก</button>
+          <button (click)="saveAddress()">บันทึกที่อยู่</button>
         </div>
       </div>
     </div>
 
     <h3>ช่องทางการชำระเงิน</h3>
-    <div class="payment-options">
-      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" value="bank_transfer" /> โอนเงินธนาคาร</label>
-      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" value="cod" /> ชำระเงินปลายทาง</label>
+      <div class="payment-options">
+      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="bank_transfer" /> โอนเงินธนาคาร</label>
+      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="cod" /> ชำระเงินปลายทาง</label>
+      <label><input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="qr" /> สแกน QR</label>
+    </div>
+    <div *ngIf="paymentMethod === 'qr'" class="qr-code">
+      <p>สแกนเพื่อชำระเงิน</p>
+      <div class="qr-preview">
+        <img *ngIf="qrUrl" [src]="qrUrl" alt="QR Payment" />
+        <div *ngIf="!qrUrl">กำลังสร้าง QR...</div>
+      </div>
     </div>
   </div>
 
@@ -46,17 +55,28 @@
     <h3>สรุปคำสั่งซื้อ</h3>
     <div class="order-summary">
       <div class="item" *ngFor="let it of items">
-        <div class="thumb">{{ it.image }}</div>
+        <div class="thumb">{{ it.product.image }}</div>
         <div class="meta">
-          <div class="name">{{ it.name }}</div>
-          <div class="size" *ngIf="it.sizes && it.sizes.length">Size: {{ it.sizes[0] }}</div>
+          <div class="name">{{ it.product.name }}</div>
+          <div *ngIf="it.product.sizes?.length" class="size-select">
+            <label>ขนาด</label>
+            <select [(ngModel)]="it.size" (ngModelChange)="updateSizeFor(it, $event)">
+              <option *ngFor="let s of it.product.sizes" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+          <div class="qty-control">
+            <label>จำนวน</label>
+            <div class="qty-controls">
+              <input type="number" [(ngModel)]="it.quantity" min="1" step="1" inputmode="numeric" (ngModelChange)="updateQuantityFor(it, $event)" />
+            </div>
+          </div>
         </div>
-        <div class="price">${{ it.price }}</div>
+        <div class="price">฿{{ (it.product.price * (it.quantity || 1)).toFixed(2) }}</div>
       </div>
 
-      <div class="summary-line"><span>Subtotal</span><span>${{ subtotal.toFixed(2) }}</span></div>
-      <div class="summary-line"><span>Marketplace fee</span><span>${{ marketplaceFee.toFixed(2) }}</span></div>
-      <div class="summary-total"><span>Total to pay</span><span>${{ total.toFixed(2) }}</span></div>
+      <div class="summary-line"><span>ยอดรวมย่อย</span><span>฿{{ subtotal.toFixed(2) }}</span></div>
+      <div class="summary-line"><span>ค่าธรรมเนียม</span><span>฿{{ marketplaceFee.toFixed(2) }}</span></div>
+      <div class="summary-total"><span>ยอดที่ต้องชำระ</span><span>฿{{ total.toFixed(2) }}</span></div>
 
       <div class="actions">
         <button class="place-order" (click)="confirmOrder()">ยืนยันการสั่งซื้อ</button>

@@ -12,12 +12,16 @@ export class FavoritesService {
   private favItems: FavoriteItem[] = [];
   private favSubject = new BehaviorSubject<FavoriteItem[]>([]);
   fav$ = this.favSubject.asObservable();
+  // expose simple list of saved ids for fast checks in templates
+  private favIdsSubject = new BehaviorSubject<number[]>([]);
+  favIds$ = this.favIdsSubject.asObservable();
 
   constructor() {
     const saved = localStorage.getItem('favorites');
     if (saved) {
       try { this.favItems = JSON.parse(saved); } catch { this.favItems = []; }
       this.favSubject.next(this.favItems);
+      this.favIdsSubject.next(this.favItems.map(i => i.product.id));
     }
   }
 
@@ -33,6 +37,7 @@ export class FavoritesService {
       this.favItems.push({ product, likedAt: new Date().toISOString() });
     }
     this.favSubject.next([...this.favItems]);
+    this.favIdsSubject.next(this.favItems.map(i => i.product.id));
     this.persist();
   }
 

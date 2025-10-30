@@ -45,4 +45,12 @@ export class AuthService {
     const user = localStorage.getItem('currentUser');
     return user ? JSON.parse(user) : null;
   }
+
+  updateCurrentUser(updated: any) {
+    if (!updated) return;
+    // merge with existing user where possible
+    const existing = this.getCurrentUser() || {};
+    const merged = { ...existing, ...updated };
+    localStorage.setItem('currentUser', JSON.stringify(merged));
+  }
 }

@@ -1,38 +1,38 @@
 <app-navbar></app-navbar>
 <div class="search-results">
-  <h2>Search results for "{{ query }}"</h2>
+  <h2>ผลการค้นหา สำหรับ "{{ query }}"</h2>
 
   <div class="filters">
-    <label>Size:
+    <label>ขนาด:
       <select [(ngModel)]="selectedSize" (change)="applyFilters()">
-        <option value="all">All</option>
+        <option value="all">ทั้งหมด</option>
         <option *ngFor="let s of ['XS','S','M','L','XL','36','37','38']" [value]="s">{{s}}</option>
       </select>
     </label>
-    <label>Sort:
+    <label>จัดเรียง:
       <select [(ngModel)]="sortOrder" (change)="applyFilters()">
-        <option value="none">Default</option>
-        <option value="asc">Price: Low → High</option>
-        <option value="desc">Price: High → Low</option>
+        <option value="none">เริ่มต้น</option>
+        <option value="asc">ราคา: ต่ำ → สูง</option>
+        <option value="desc">ราคา: สูง → ต่ำ</option>
       </select>
     </label>
   </div>
 
   <div *ngIf="!displayed || displayed.length === 0">
-    <p>No products found.</p>
+    <p>ไม่พบสินค้า</p>
   </div>
 
-  <ul *ngIf="displayed && displayed.length">
-    <li *ngFor="let p of displayed" class="product">
-      <div class="img">{{ p.image }}</div>
-      <div class="info">
-        <div class="name">{{ p.name }}</div>
-        <div class="price">${{ p.price }}</div>
+  <div *ngIf="displayed && displayed.length" class="product-grid">
+    <div *ngFor="let p of displayed" class="product-card">
+      <div class="product-image">{{ p.image }}</div>
+      <div class="product-info">
+        <div class="product-name">{{ p.name }}</div>
+        <div class="product-price">฿{{ p.price }}</div>
       </div>
-      <div class="actions">
-        <a [routerLink]="['/product', p.id]" class="view-btn">View</a>
+      <div class="product-actions">
+        <a [routerLink]="['/product', p.id]" class="view-btn">ดูรายละเอียด</a>
         <button (click)="toggleSave(p)" class="heart-btn">{{ isSaved(p) ? '♥' : '♡' }}</button>
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>
