@@ -1,11 +1,52 @@
 <app-navbar></app-navbar>
-<div class="product-list">
-  <h2>Men's Products</h2>
-  <div class="product-card" *ngFor="let product of products">
-    <img [src]="product.image_url" alt="{{ product.name }}" />
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p>{{ product.price | currency }}</p>
-    <button (click)="buyProduct(product)">Buy</button>
+<h2>คอลเลคชั่นสำหรับผู้ชาย</h2>
+
+<div class="filters">
+  <label>หมวดหมู่:
+    <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+      <option value="all">ทั้งหมด</option>
+      <option value="tops">เสื้อ</option>
+      <option value="pants">กางเกง</option>
+      <option value="jackets">แจ็คเก็ต</option>
+      <option value="shoes">รองเท้า</option>
+    </select>
+  </label>
+  
+  <label>ขนาด:
+    <select [(ngModel)]="selectedSize" (change)="applyFilters()">
+      <option value="all">ทั้งหมด</option>
+      <option *ngFor="let s of availableSizes" [value]="s">{{s}}</option>
+    </select>
+  </label>
+  
+  <label>จัดเรียง:
+    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+      <option value="none">เริ่มต้น</option>
+      <option value="asc">ราคา: ต่ำ → สูง</option>
+      <option value="desc">ราคา: สูง → ต่ำ</option>
+    </select>
+  </label>
+</div>
+
+<div class="product-grid">
+  <div class="product-card" *ngFor="let product of displayed; trackBy: trackByProduct">
+    <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
+    <span class="new-badge" *ngIf="product.new">ใหม่</span>
+    <div class="product-image" [ngStyle]="{'background-image': 'url(' + product.image + ')'}"></div>
+    <div class="product-info">
+      <div class="product-name">{{product.name}}</div>
+      <div class="product-price">
+        ฿{{product.price}}
+        <span class="original-price" *ngIf="product.originalPrice">
+          ฿{{product.originalPrice}}
+        </span>
+      </div>
+      <div class="product-rating">⭐ {{product.rating}}/5</div>
+      <div class="product-actions">
+        <a [routerLink]="['/product', product.id]" class="view-btn">ดูรายละเอียด</a>
+        <button (click)="toggleSave(product)" class="heart-btn">{{ savedIds.has(product.id) ? '♥' : '♡' }}</button>
+      </div>
+    </div>
   </div>
 </div>
+<app-footer></app-footer>

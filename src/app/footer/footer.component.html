@@ -1,0 +1,77 @@
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-container">
+      <!-- Logo และรายละเอียดร้าน -->
+      <div class="footer-column footer-brand">
+        <h2 class="brand-logo">2Hshop</h2>
+        <p class="brand-description">
+          ร้านค้าเสื้อผ้าออนไลน์คุณภาพ มีสินค้าหลากหลายสไตล์ 
+          พร้อมส่งทั่วประเทศไทย
+        </p>
+        <div class="contact-info">
+          <p><i class="fas fa-phone"></i> โทร: 02-123-4567</p>
+          <p><i class="fas fa-envelope"></i> อีเมล: info2hshop.com</p>
+          <p><i class="fas fa-clock"></i> จ.-ส. 09:00-18:00 น.</p>
+        </div>
+      </div>
+
+      <!-- เกี่ยวกับเรา -->
+      <div class="footer-column">
+        <h3 class="footer-title">เกี่ยวกับเรา</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of aboutLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- บริการลูกค้า -->
+      <div class="footer-column">
+        <h3 class="footer-title">บริการลูกค้า</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of serviceLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- หมวดหมู่สินค้า -->
+      <div class="footer-column">
+        <h3 class="footer-title">หมวดหมู่สินค้า</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of categoryLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          © {{ currentYear }} 2Hshop. สงวนลิขสิทธิ์.
+        </p>
+        
+        <div class="social-links">
+          <a *ngFor="let social of socialLinks" 
+             [href]="social.url" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             [attr.aria-label]="social.name">
+            <i [class]="social.icon"></i>
+          </a>
+        </div>
+
+        <div class="payment-methods">
+          <span>ช่องทางการชำระเงิน:</span>
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

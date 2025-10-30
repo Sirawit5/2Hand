@@ -1,1 +1,44 @@
-<app-navbar></app-navbar> <!-- แสดง Navbar ทุกหน้า -->
+<app-navbar></app-navbar>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-background"></div>
+  <div class="hero-content">
+    <h1>ยินดีต้อนรับสู่ 2Hshop</h1>
+    <p>ค้นหาสินค้ามือสองคุณภาพดีในราคาที่คุณพอใจ</p>
+  </div>
+</section>
+
+<!-- Product Section -->
+<section class="featured-section">
+  <div class="container">
+    <h2>สินค้าแนะนำ</h2>
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of displayed; trackBy: trackByProduct">
+        <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
+        <span class="new-badge" *ngIf="product.new">ใหม่</span>
+        <div class="product-image" [ngStyle]="{'background-image': 'url(' + product.image + ')'}"></div>
+        <div class="product-info">
+          <div class="product-name">{{product.name}}</div>
+          <div class="product-price">
+            ฿{{product.price}}
+            <span class="original-price" *ngIf="product.originalPrice">
+              ฿{{product.originalPrice}}
+            </span>
+          </div>
+          <div class="product-rating">⭐ {{product.rating}}/5</div>
+          <div class="product-actions">
+            <a [routerLink]="['/product', product.id]" class="view-btn">ดูรายละเอียด</a>
+            <button (click)="toggleSave(product)" class="heart-btn" [class.saved]="savedIds.has(product.id)">
+              {{ savedIds.has(product.id) ? '♥' : '♡' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="view-all-container">
+      <a routerLink="/women" class="view-all-btn">ดูสินค้าทั้งหมด →</a>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>

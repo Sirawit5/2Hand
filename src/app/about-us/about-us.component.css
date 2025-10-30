@@ -1,0 +1,4 @@
+.host{display:block;padding:12px}
+.about-card{background:var(--panel-bg);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+.about-hero{display:flex;gap:16px;align-items:center}
+.about-hero img{width:240px;height:160px;object-fit:cover;border-radius:8px}

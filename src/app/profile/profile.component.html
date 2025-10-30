@@ -1,0 +1,170 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container" *ngIf="user">
+  <h2>โปรไฟล์ของฉัน</h2>
+  
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div *ngIf="!editMode">
+      <p><strong>ชื่อ:</strong> {{ user.username }}</p>
+      <p><strong>อีเมล:</strong> {{ user.email }}</p>
+      <p><strong>ที่อยู่:</strong> {{ user.address || 'ยังไม่ได้ระบุ' }}</p>
+      <p><strong>เบอร์โทรศัพท์:</strong> {{ user.phone || 'ยังไม่ได้ระบุ' }}</p>
+      <button (click)="enableEdit()">แก้ไขข้อมูลส่วนตัว</button>
+    </div>
+
+    <div *ngIf="editMode">
+      <label>ชื่อ:</label>
+      <input type="text" [(ngModel)]="editedUser.name" placeholder="กรุณากรอกชื่อ" />
+
+      <label>อีเมล:</label>
+      <input type="email" [(ngModel)]="editedUser.email" placeholder="example@email.com" />
+
+      <label>ที่อยู่:</label>
+      <textarea [(ngModel)]="editedUser.address" placeholder="กรุณากรอกที่อยู่" rows="3"></textarea>
+
+      <label>เบอร์โทรศัพท์:</label>
+      <input type="tel" [(ngModel)]="editedUser.phone" placeholder="0XX-XXX-XXXX" />
+
+      <div class="edit-actions">
+        <button (click)="saveProfile()">บันทึก</button>
+        <button (click)="cancelEdit()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved Items Section -->
+  <section class="saved">
+    <h3>รายการที่ชอบ</h3>
+    <div *ngIf="!saved || saved.length === 0" class="empty-state">
+      <div class="empty-icon">💝</div>
+      <p>ยังไม่มีสินค้าที่ชอบ</p>
+    </div>
+    <div class="saved-list" *ngIf="saved && saved.length > 0">
+      <div class="saved-card" *ngFor="let fav of saved">
+        <div class="thumb">
+          <img [src]="fav.product.image" [alt]="fav.product.name" />
+        </div>
+        <div class="meta">
+          <div class="name">{{ fav.product.name }}</div>
+          <div class="price">฿{{ fav.product.price | number:'1.2-2' }}</div>
+          <div class="meta-small">ถูกใจเมื่อ: {{ fav.likedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+        <div class="actions">
+          <a [routerLink]="['/product', fav.product.id]" class="view-btn">ดูรายละเอียด</a>
+          <button (click)="removeSaved(fav.product.id)" class="remove-btn">ลบออก ♥</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Orders Section - ปรับปรุงใหม่ -->
+  <section class="orders">
+    <h3>คำสั่งซื้อ</h3>
+    
+    <div *ngIf="!orders || orders.length === 0" class="empty-state">
+      <div class="empty-icon">📦</div>
+      <p>ยังไม่มีคำสั่งซื้อ</p>
+      <a routerLink="/" class="shop-now-btn">เลือกซื้อสินค้า</a>
+    </div>
+
+    <div *ngFor="let o of orders" class="order-card">
+      <!-- Order Header -->
+      <div class="order-header" (click)="toggleOrder(o)">
+        <div class="order-header-left">
+          <div class="order-id">
+            <span class="label">คำสั่งซื้อ</span>
+            <span class="value">#{{ o.id }}</span>
+          </div>
+          <div class="order-date">
+            <span class="icon">📅</span>
+            <span>{{ o.createdAt | date:'dd MMM yyyy, HH:mm' }}</span>
+          </div>
+        </div>
+        <div class="order-header-right">
+          <span class="order-status" [ngClass]="getStatusClass(o.status)">
+            {{ getStatusText(o.status) }}
+          </span>
+          <span class="expand-icon">{{ orderOpenSymbol(o) }}</span>
+        </div>
+      </div>
+
+      <!-- Order Details (Expanded) -->
+      <div *ngIf="isOrderOpen(o)" class="order-details">
+        <!-- Payment & Shipping Info -->
+        <div class="order-info-grid">
+          <div class="info-item">
+            <span class="info-label">💳 วิธีชำระเงิน</span>
+            <span class="info-value">{{ getPaymentMethodText(o.paymentMethod) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">📍 ที่อยู่จัดส่ง</span>
+            <span class="info-value">{{ o.address || 'ไม่ระบุ' }}</span>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="order-items">
+          <h4>รายการสินค้า</h4>
+          <div *ngFor="let it of o.items" class="order-item">
+            <div class="item-image">
+              <img [src]="it.product.image" [alt]="it.product.name" />
+            </div>
+            <div class="item-details">
+              <div class="item-name">{{ it.product.name }}</div>
+              <div class="item-meta">
+                <span *ngIf="it.size" class="item-size">ขนาด: {{ it.size }}</span>
+                <span class="item-qty">จำนวน: {{ it.quantity || 1 }}</span>
+              </div>
+            </div>
+            <div class="item-price">
+              <div class="unit-price">฿{{ it.product.price | number:'1.2-2' }}</div>
+              <div class="total-price">
+                รวม: ฿{{ (it.product.price * (it.quantity || 1)) | number:'1.2-2' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <div class="summary-row">
+            <span>ยอดรวมสินค้า</span>
+            <span>฿{{ getSubtotal(o) | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-row">
+            <span>ค่าจัดส่ง</span>
+            <span class="free-text">ฟรี</span>
+          </div>
+          <div class="summary-row total">
+            <span>ยอดรวมทั้งหมด</span>
+            <span class="total-amount">฿{{ o.total | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <!-- Order Actions -->
+        <div class="order-actions">
+          <button class="action-btn primary" (click)="reorder(o)">
+            🔄 สั่งซื้ออีกครั้ง
+          </button>
+          <button class="action-btn secondary" (click)="viewReceipt(o)">
+            🧾 ดูใบเสร็จ
+          </button>
+          <button 
+            *ngIf="canCancelOrder(o.status)" 
+            class="action-btn danger" 
+            (click)="cancelOrder(o)">
+            ❌ ยกเลิกคำสั่งซื้อ
+          </button>
+        </div>
+      </div>
+
+      <!-- Order Total (Always Visible) -->
+      <div class="order-footer">
+        <span class="footer-label">ยอดชำระทั้งหมด:</span>
+        <span class="footer-amount">฿{{ o.total | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </section>
+</div>
+<app-footer></app-footer>

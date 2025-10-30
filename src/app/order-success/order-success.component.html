@@ -1,0 +1,51 @@
+<!-- order-success.component.html -->
+<app-navbar></app-navbar>
+
+<div class="order-success-container">
+  <div class="success-card">
+    <!-- Success Icon -->
+    <div class="success-icon">
+      <div class="checkmark-circle">
+        <div class="checkmark"></div>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    <h1>สั่งซื้อสำเร็จ!</h1>
+    <p class="subtitle">ขอบคุณที่ใช้บริการ 2Hand</p>
+
+    <!-- Order Details -->
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="label">หมายเลขคำสั่งซื้อ:</span>
+        <span class="value">{{ orderNumber }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">สถานะ:</span>
+        <span class="value status">กำลังดำเนินการ</span>
+      </div>
+    </div>
+    <!-- Next Steps -->
+    <div class="next-steps">
+      <h3>ขั้นตอนถัดไป</h3>
+        <div class="step">
+          <p>รอรับสินค้า 3-5 วัน</p>
+        </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn-primary" (click)="viewOrders()">
+        ดูคำสั่งซื้อของฉัน
+      </button>
+      <button class="btn-secondary" (click)="goHome()">
+        กลับหน้าหลัก
+      </button>
+    </div>
+
+    <!-- Auto Redirect Message (optional) -->
+    <!-- <p class="redirect-message">กำลังนำท่านกลับหน้าหลักใน {{ countdown }} วินาที...</p> -->
+  </div>
+</div>
+<app-footer></app-footer>

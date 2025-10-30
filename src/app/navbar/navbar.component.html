@@ -1,24 +1,43 @@
 <nav class="navbar">
-  <ul>
-    <li><a routerLink="/home">Home</a></li>
-    <li><a routerLink="/women">Women</a></li>
-    <li><a routerLink="/men">Men</a></li>
-    <li><a routerLink="/kids">Kids</a></li>
-    <li><a routerLink="/sports">Sports</a></li>
-    <li><a routerLink="/about">About</a></li>
+  <header>
+    <div class="top-row">
+      <a routerLink="/home" class="logo">2HShop</a>
 
-    
+      <div class="search-box">
+        <input type="search" placeholder="ค้นหาสินค้า..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+        <button class="search-btn" (click)="onSearch()">ค้นหา</button>
+      </div>
 
-    <!-- แสดงลิงก์เฉพาะ ADMIN -->
-    <li *ngIf="(isAdmin$ | async)"><a routerLink="/admin-page">Admin Panel</a></li>
+      <div class="auth-buttons" *ngIf="!isLoggedIn">
+        <button routerLink="/login">เข้าสู่ระบบ</button>
+        <button routerLink="/signup">สมัครสมาชิก</button>
+      </div>
 
-    <li *ngIf="(isLoggedIn$ | async); else guest">
-      <span class="username">👤 {{ (username$ | async) || '' }}</span>
-      <button (click)="signOut()">Sign Out</button>
-    </li>
-    <ng-template #guest>
-      <a routerLink="/login">Log In</a>
-      <a routerLink="/sign-up">Sign Up</a>
-    </ng-template>
-  </ul>
+      <div class="profile-menu" *ngIf="isLoggedIn">
+        <span class="welcome-text">สวัสดี, {{ username }}</span>
+        <button class="cart-btn" routerLink="/cart">
+          <i class="fas fa-shopping-cart"></i>
+          ตะกร้า
+          <span class="cart-badge" *ngIf="cartCount">{{ cartCount }}</span>
+        </button>
+        <button class="profile-btn" routerLink="/profile" title="โปรไฟล์">
+          <i class="fas fa-user"></i>
+        </button>
+        <button class="logout-btn" (click)="logout()" title="ออกจากระบบ">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <ul class="nav-links">
+        <li><a routerLink="/home">หน้าแรก</a></li>
+        <li><a routerLink="/women">ผู้หญิง</a></li>
+        <li><a routerLink="/men">ผู้ชาย</a></li>
+        <li><a routerLink="/kids">เด็ก</a></li>
+        <li><a routerLink="/about">เกี่ยวกับเรา</a></li>
+      </ul>
+    </div>
+    <app-breadcrumb></app-breadcrumb>
+  </header>
 </nav>

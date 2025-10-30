@@ -6,28 +6,37 @@ import { HttpClientModule } from '@angular/common/http';  // Import HttpClientMo
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { FormsModule } from '@angular/forms';
-import { HomeComponent } from './home/home.component';  // สมมติว่ามีหน้า Home
+import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AboutUSComponent } from './about-us/about-us.component';
 import { WomenComponent } from './women/women.component';
 import { MenComponent } from './men/men.component';
 import { KidsComponent } from './kids/kids.component';
-import { SportsComponent } from './sports/sports.component';
-import { AdminPageComponent } from './admin/admin-page/admin-page.component';
-import { NavbarAdminComponent } from './admin/navbar-admin/navbar-admin.component';
+import { CartComponent } from './cart/cart.component';
+import { ProfileComponent } from './profile/profile.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { OrderSuccessComponent } from './order-success/order-success.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { FooterComponent } from './footer/footer.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     SignupPageComponent,
     LoginPageComponent,
-    HomeComponent, 
-    NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent, SportsComponent, AdminPageComponent, NavbarAdminComponent
+    HomeComponent,
+    BreadcrumbComponent,
+  NavbarComponent, AboutUSComponent, WomenComponent, MenComponent, KidsComponent, CartComponent, ProfileComponent, CheckoutComponent, OrderSuccessComponent, SearchResultsComponent,
+  ProductDetailComponent,
+  FooterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,  // เพิ่ม HttpClientModule ที่นี่
-    FormsModule
+    HttpClientModule,  
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
