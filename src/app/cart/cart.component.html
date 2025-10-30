@@ -1,19 +1,91 @@
 <app-navbar></app-navbar>
-<h2>🛒 ตะกร้าสินค้า</h2>
 
-<div *ngIf="items.length === 0">ไม่มีสินค้าในตะกร้า</div>
+<div class="cart-page">
+  <div class="cart-container">
+    <!-- Header -->
+    <div class="cart-header">
+      <h2 class="cart-title">ตะกร้าสินค้า</h2>
+      <span class="items-count">{{ items.length }} {{ items.length === 1 ? 'รายการ' : 'รายการ' }}</span>
+    </div>
 
-<div *ngFor="let item of items" class="cart-item">
-  <span class="emoji">{{ item.product.image }}</span>
-  <span>{{ item.product.name }}</span>
-  <span>${{ item.product.price }}</span>
-  <span class="meta-small">Added: {{ item.addedAt }}</span>
-  <button (click)="removeItem(item.product.id)">ลบ</button>
+    <!-- Empty State -->
+    <div class="empty-cart" *ngIf="items.length === 0">
+      <div class="empty-icon">🛒</div>
+      <h3>ตะกร้าสินค้าของคุณว่างเปล่า</h3>
+      <p>เพิ่มสินค้าเพื่อเริ่มต้น!</p>
+      <a routerLink="/home" class="continue-shopping-btn">เลือกซื้อสินค้าต่อ</a>
+    </div>
+
+    <!-- Cart Content -->
+    <div class="cart-content" *ngIf="items.length > 0">
+      <!-- Cart Items -->
+      <div class="cart-items-section">
+        <div class="cart-item" *ngFor="let item of items">
+          <div class="item-image" [ngStyle]="{'background-image': 'url(' + item.product.image + ')'}"></div>
+          
+          <div class="item-details">
+            <h3 class="item-name">{{ item.product.name }}</h3>
+            <p class="item-meta">เพิ่มเมื่อ {{ item.addedAt | date:'short' }}</p>
+            
+            <div class="item-actions-mobile">
+              <span class="item-price">฿{{ item.product.price }}</span>
+              <button class="remove-btn-mobile" (click)="removeItem(item.product.id)">
+                ลบ
+              </button>
+            </div>
+          </div>
+
+          <div class="item-price-desktop">
+            <span class="price-label">ราคา</span>
+            <span class="price-amount">฿{{ item.product.price }}</span>
+          </div>
+
+          <div class="item-actions-desktop">
+            <button class="remove-btn" (click)="removeItem(item.product.id)">
+              
+              <span class="remove-text">ลบรายการ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3 class="summary-title">สรุปคำสั่งซื้อ</h3>
+        
+        <div class="summary-row">
+          <span class="summary-label">ราคาสินค้า</span>
+          <span class="summary-value">฿{{ total }}</span>
+        </div>
+        
+        <div class="summary-row">
+          <span class="summary-label">ค่าจัดส่ง</span>
+          <span class="summary-value free">ฟรี</span>
+        </div>
+        
+        <div class="summary-row">
+          <span class="summary-label">ภาษี</span>
+          <span class="summary-value">คำนวณเมื่อชำระเงิน</span>
+        </div>
+        
+        <div class="summary-divider"></div>
+        
+        <div class="summary-row total-row">
+          <span class="summary-label">ยอดรวมทั้งหมด</span>
+          <span class="summary-value total-value">฿{{ total }}</span>
+        </div>
+
+        <button 
+          class="checkout-btn" 
+          (click)="checkout()" 
+          [disabled]="items.length === 0">
+          ดำเนินการชำระเงิน
+        </button>
+
+        <a routerLink="/home" class="continue-shopping-link">
+          ← เลือกซื้อสินค้าต่อ
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
-
-<hr>
-<div class="cart-total">
-  รวมทั้งหมด: <b>${{ total }}</b>
-</div>
-
-<button (click)="checkout()" [disabled]="items.length === 0">ดำเนินการชำระเงิน</button>

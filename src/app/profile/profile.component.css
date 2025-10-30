@@ -1,7 +1,397 @@
-.host{display:block;padding:12px}
-.profile-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.saved-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px}
-.order-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
-.saved-card{background:var(--panel-bg);padding:10px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
-.saved-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-.order-card{background:var(--panel-bg);padding:12px;border-radius:10px}
+/* iOS-Inspired Profile Page */
+
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+  background: #f5f5f7;
+  min-height: 100vh;
+}
+
+.profile-container > h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 32px;
+  letter-spacing: -0.03em;
+}
+
+/* Profile Card */
+.profile-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  margin-bottom: 32px;
+}
+
+.profile-card p {
+  font-size: 1.0625rem;
+  color: #1d1d1f;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.profile-card strong {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 120px;
+  display: inline-block;
+}
+
+.profile-card button {
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  font-family: inherit;
+}
+
+.profile-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* Edit Mode */
+.profile-card label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+
+.profile-card input,
+.profile-card textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: #fafafa;
+  font-size: 1rem;
+  color: #1d1d1f;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.profile-card textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.profile-card input:focus,
+.profile-card textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.edit-actions button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.edit-actions button:last-child {
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+  color: #667eea;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.edit-actions button:last-child:hover {
+  background: #fafafa;
+  transform: translateY(-1px);
+}
+
+/* Section Titles */
+.saved h3,
+.orders h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+/* Empty State */
+.saved > div:first-of-type,
+.orders > div:first-of-type {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  color: #86868b;
+  font-size: 1.0625rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Saved Section */
+.saved {
+  margin-bottom: 48px;
+}
+
+.saved-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.saved-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.saved-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.saved-card .thumb {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f5 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.saved-card .meta {
+  flex: 1;
+}
+
+.saved-card .name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+}
+
+.saved-card .price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 8px;
+}
+
+.saved-card .meta-small {
+  font-size: 0.875rem;
+  color: #86868b;
+}
+
+.saved-card .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.saved-card .actions a,
+.saved-card .actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.saved-card .actions a {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  display: block;
+}
+
+.saved-card .actions a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.saved-card .actions button {
+  background: rgba(255, 59, 48, 0.08);
+  color: #ff3b30;
+  border: 1.5px solid rgba(255, 59, 48, 0.2);
+}
+
+.saved-card .actions button:hover {
+  background: rgba(255, 59, 48, 0.12);
+  border-color: rgba(255, 59, 48, 0.4);
+}
+
+/* Orders Section */
+.orders {
+  margin-bottom: 48px;
+}
+
+.order-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  user-select: none;
+}
+
+.order-header:hover {
+  color: #667eea;
+}
+
+.order-items {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 10px;
+}
+
+.order-item .thumb {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.order-item .name {
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.order-item .price {
+  font-weight: 700;
+  color: #667eea;
+  font-size: 1.125rem;
+}
+
+.order-item .meta-small {
+  font-size: 0.8125rem;
+  color: #86868b;
+}
+
+.order-total {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: right;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 24px 20px 60px;
+  }
+
+  .profile-container > h2 {
+    font-size: 2rem;
+  }
+
+  .saved h3,
+  .orders h3 {
+    font-size: 1.5rem;
+  }
+
+  .saved-list {
+    grid-template-columns: 1fr;
+  }
+
+  .order-item {
+    grid-template-columns: 50px 1fr;
+    gap: 12px;
+  }
+
+  .order-item .price,
+  .order-item .meta-small {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 20px 16px 60px;
+  }
+
+  .profile-container > h2 {
+    font-size: 1.75rem;
+  }
+
+  .profile-card {
+    padding: 24px;
+  }
+
+  .saved-card .thumb {
+    height: 160px;
+    font-size: 4rem;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+}

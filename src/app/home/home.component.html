@@ -22,7 +22,7 @@
 <div class="product-grid">
   <div class="product-card" *ngFor="let product of displayed">
     <span class="sale-badge" *ngIf="product.sale">-{{product.sale}}%</span>
-    <div class="product-image">{{product.image}}</div>
+    <div class="product-image" [ngStyle]="{'background-image': 'url(' + product.image + ')'}"></div>
     <div class="product-info">
       <div class="product-name">{{product.name}}</div>
       <div class="product-price">

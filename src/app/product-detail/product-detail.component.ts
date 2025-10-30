@@ -35,7 +35,7 @@ export class ProductDetailComponent implements OnInit {
   addToBag() {
     if (!this.product) return;
     this.cartService.addToCart(this.product, this.quantity, this.selectedSize || undefined);
-    alert(`${this.product.name} (x${this.quantity}) added to bag.`);
+    alert(` เพิ่มสินค้าจำนวน ${this.quantity} สำเร็จ `);
   }
 
   buyNow() {

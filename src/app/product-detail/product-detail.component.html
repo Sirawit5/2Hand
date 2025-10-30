@@ -3,7 +3,8 @@
 <div class="product-detail">
   <div class="left">
     <div class="product-image">
-      <div class="image-inner">{{ product?.image }}</div>
+      <!-- แสดงรูปภาพโดยใช้ [src] สำหรับ binding -->
+      <img [src]="product?.image" alt="{{product?.name}}" class="image-inner" />
       <div class="icons">
         <button (click)="toggleSave()" class="heart-btn">{{ isSaved() ? '♥' : '♡' }}</button>
         <button class="bookmark">🔖</button>

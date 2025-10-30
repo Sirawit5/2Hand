@@ -9,7 +9,7 @@
         <p *ngIf="addressObj.city">{{ addressObj.city }} {{ addressObj.postcode }}</p>
         <p *ngIf="addressObj.phone">เบอร์โทรศัพท์: {{ addressObj.phone }}</p>
         <!-- Thai formatted single-line address for convenience -->
-        <p *ngIf="thaiAddress"><strong>ที่อยู่ (ภาษาไทย):</strong> {{ thaiAddress }}</p>
+       
         <div class="address-actions">
           <button (click)="editAddress()">แก้ไขที่อยู่</button>
         </div>
