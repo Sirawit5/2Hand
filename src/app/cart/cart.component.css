@@ -14,6 +14,7 @@
 
 /* Cart Header */
 .cart-header {
+  font-family: 'Noto Sans Thai', sans-serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,6 +24,7 @@
 }
 
 .cart-title {
+  font-family: 'Noto Sans Thai', sans-serif;
   font-size: 28px;
   font-weight: 700;
   color: #1a1a1a;
@@ -206,6 +208,7 @@
 }
 
 .remove-btn {
+  font-family: 'Noto Sans Thai', sans-serif;
   display: flex;
   align-items: center;
   gap: 8px;

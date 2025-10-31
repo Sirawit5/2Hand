@@ -1,11 +1,22 @@
 /* Navbar Container */
+
 .navbar {
+  font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   position: sticky;
   top: 0;
   z-index: 100;
   width: 100%;
+}
+
+/* Preserve icon fonts */
+.navbar i,
+.navbar .fa,
+.navbar .fas,
+.navbar .far,
+.navbar .fab {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', 'Font Awesome 5 Brands' !important;
 }
 
 .navbar header {
@@ -145,6 +156,19 @@
   position: relative;
 }
 
+/* Icon sizes for buttons */
+.cart-btn i {
+  font-size: 16px;
+}
+
+.profile-btn i {
+  font-size: 18px; /* ปรับขนาด icon profile */
+}
+
+.logout-btn i {
+  font-size: 18px; /* ปรับขนาด icon logout */
+}
+
 .cart-btn {
   color: #09968a;
   border-color: #09968a;
@@ -228,4 +252,75 @@ app-breadcrumb {
   border-top: 1px solid #f0f0f0;
   font-size: 13px;
   color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-row {
+    flex-wrap: wrap;
+    padding: 12px 15px;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 24px;
+  }
+
+  .search-box {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .auth-buttons,
+  .profile-menu {
+    flex-wrap: wrap;
+  }
+
+  .welcome-text {
+    display: none;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-links a {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  /* ปรับขนาด icon สำหรับ mobile */
+  .cart-btn i,
+  .profile-btn i,
+  .logout-btn i {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 20px;
+  }
+
+  .search-btn {
+    padding: 10px 16px;
+  }
+
+  .auth-buttons button {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  .nav-links a {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .cart-btn,
+  .profile-btn,
+  .logout-btn {
+    padding: 8px 12px;
+  }
 }

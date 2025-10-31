@@ -39,7 +39,7 @@
 }
 
 .sign-up-title::before {
-  content: '👤 ';
+  content: '';
   margin-right: 8px;
 }
 

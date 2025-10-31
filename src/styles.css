@@ -23,6 +23,7 @@ body {
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Sans Thai', sans-serif;
   font-weight: 600;
   color: #1a1a1a;
 }

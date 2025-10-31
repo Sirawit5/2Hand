@@ -34,18 +34,15 @@
           <input [(ngModel)]="addressObj.phone" placeholder="0XX-XXX-XXXX" required />
         </label>
         <div class="address-actions">
-          <button (click)="saveAddress()">💾 บันทึกที่อยู่</button>
-          <button (click)="editingAddress = false" class="cancel-btn">❌ ยกเลิก</button>
+          <button (click)="saveAddress()">บันทึกที่อยู่</button>
+          <button (click)="editingAddress = false" class="cancel-btn">ยกเลิก</button>
         </div>
       </div>
     </div>
 
     <h3>ช่องทางการชำระเงิน</h3>
     <div class="payment-options">
-      <label>
-        <input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="bank_transfer" />
-        🏦 โอนเงินธนาคาร
-      </label>
+      
       <label>
         <input type="radio" name="pay" [(ngModel)]="paymentMethod" (ngModelChange)="onSelectPayment($event)" value="cod" />
         💵 ชำระเงินปลายทาง

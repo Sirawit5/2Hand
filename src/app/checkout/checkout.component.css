@@ -1,6 +1,7 @@
 /* checkout.component.css */
 
 .checkout-container {
+  font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 60px 60px;
@@ -40,6 +41,11 @@
   margin-bottom: 0;
 }
 
+.address-card strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
 /* Address Form */
 .address-form {
   display: flex;
@@ -61,7 +67,6 @@
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 15px;
-  font-family: 'Noto Sans Thai', sans-serif;
   transition: all 0.3s;
   background: #f8f9fa;
 }
@@ -73,27 +78,84 @@
   box-shadow: 0 0 0 3px rgba(9, 150, 138, 0.1);
 }
 
-/* Address Actions */
+.address-form input::placeholder {
+  color: #999;
+}
+
+/* Address Actions - ปรับปรุงใหม่ */
 .address-actions {
-  margin-top: 15px;
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
 }
 
 .address-actions button {
-  padding: 10px 24px;
-  background: #09968a;
-  color: white;
+  flex: 1;
+  padding: 12px 24px;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.address-actions button:hover {
+/* Primary Button (บันทึก/แก้ไข) */
+.address-actions button:first-child:not(.delete-btn):not(.cancel-btn) {
+  background: #09968a;
+  color: white;
+  box-shadow: 0 2px 4px rgba(9, 150, 138, 0.2);
+}
+
+.address-actions button:first-child:not(.delete-btn):not(.cancel-btn):hover {
   background: #087d73;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(9, 150, 138, 0.3);
+  box-shadow: 0 4px 12px rgba(9, 150, 138, 0.3);
+}
+
+.address-actions button:first-child:not(.delete-btn):not(.cancel-btn):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(9, 150, 138, 0.2);
+}
+
+/* Delete Button */
+.address-actions .delete-btn {
+  background: white;
+  color: #f44336;
+  border: 2px solid #f44336;
+}
+
+.address-actions .delete-btn:hover {
+  background: #f44336;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.address-actions .delete-btn:active {
+  transform: translateY(0);
+}
+
+/* Cancel Button */
+.address-actions .cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.address-actions .cancel-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+  border-color: #ccc;
+  transform: translateY(-2px);
+}
+
+.address-actions .cancel-btn:active {
+  transform: translateY(0);
 }
 
 /* Payment Options */
@@ -133,7 +195,6 @@
   accent-color: #09968a;
 }
 
-.payment-options input[type="radio"]:checked + label,
 .payment-options label:has(input[type="radio"]:checked) {
   border-color: #09968a;
   background: rgba(9, 150, 138, 0.05);
@@ -214,14 +275,34 @@
   border-bottom: none;
 }
 
+/* Order Item Thumbnail */
 .item .thumb {
   width: 80px;
   height: 80px;
   background: #f5f5f5;
   border-radius: 8px;
   flex-shrink: 0;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.item .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Fallback สำหรับรูปที่โหลดไม่ได้ */
+.item .thumb::after {
+  content: '📦';
+  font-size: 32px;
+  position: absolute;
+  opacity: 0.2;
 }
 
 .item .meta {
@@ -237,15 +318,18 @@
 
 /* Size Select */
 .size-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
 .size-select label {
-  display: block;
   font-size: 13px;
   font-weight: 600;
   color: #666;
-  margin-bottom: 5px;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .size-select select {
@@ -253,15 +337,16 @@
   border: 2px solid #e0e0e0;
   border-radius: 6px;
   font-size: 14px;
-  font-family: 'Noto Sans Thai', sans-serif;
   cursor: pointer;
   transition: all 0.3s;
   background: white;
+  min-width: 80px;
 }
 
 .size-select select:focus {
   outline: none;
   border-color: #09968a;
+  box-shadow: 0 0 0 3px rgba(9, 150, 138, 0.1);
 }
 
 /* Quantity Control */
@@ -275,6 +360,7 @@
   font-size: 13px;
   font-weight: 600;
   color: #666;
+  white-space: nowrap;
 }
 
 .qty-controls input {
@@ -285,12 +371,13 @@
   text-align: center;
   font-size: 14px;
   font-weight: 600;
-  font-family: 'Noto Sans Thai', sans-serif;
+  transition: all 0.3s;
 }
 
 .qty-controls input:focus {
   outline: none;
   border-color: #09968a;
+  box-shadow: 0 0 0 3px rgba(9, 150, 138, 0.1);
 }
 
 /* Remove spinner */
@@ -309,6 +396,7 @@
   font-weight: 700;
   color: #09968a;
   white-space: nowrap;
+  align-self: flex-start;
 }
 
 /* Summary Lines */
@@ -336,6 +424,10 @@
   margin-top: 10px;
 }
 
+.summary-total span:last-child {
+  color: #09968a;
+}
+
 /* Actions */
 .actions {
   margin-top: 25px;
@@ -352,39 +444,46 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  font-family: 'Noto Sans Thai', sans-serif;
+  box-shadow: 0 2px 4px rgba(9, 150, 138, 0.2);
 }
 
-.place-order:hover {
+.place-order:hover:not(:disabled) {
   background: #087d73;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(9, 150, 138, 0.3);
 }
 
-.place-order:active {
+.place-order:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Empty State */
-.empty-cart {
+.place-order:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Empty Cart Message */
+.empty-cart-message {
   text-align: center;
   padding: 60px 20px;
   color: #666;
 }
 
-.empty-cart::before {
+.empty-cart-message::before {
   content: '🛒';
   display: block;
   font-size: 64px;
   margin-bottom: 20px;
+  opacity: 0.5;
 }
 
-.empty-cart p {
-  font-size: 18px;
+.empty-cart-message p {
+  font-size: 16px;
   margin-bottom: 20px;
 }
 
-.empty-cart a {
+.shop-link {
   display: inline-block;
   padding: 12px 30px;
   background: #09968a;
@@ -395,7 +494,7 @@
   transition: all 0.3s;
 }
 
-.empty-cart a:hover {
+.shop-link:hover {
   background: #087d73;
   transform: translateY(-2px);
 }
@@ -446,6 +545,14 @@
     text-align: right;
     margin-top: 10px;
   }
+
+  .address-actions {
+    flex-direction: column;
+  }
+
+  .address-actions button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -471,6 +578,15 @@
     font-size: 14px;
   }
 
+  .address-actions {
+    gap: 10px;
+  }
+
+  .address-actions button {
+    padding: 11px 20px;
+    font-size: 14px;
+  }
+
   .payment-options label {
     padding: 12px;
     font-size: 14px;
@@ -480,8 +596,19 @@
     height: 120px;
   }
 
-  .summary-line,
-  .summary-total {
+  .size-select,
+  .qty-control {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .size-select select,
+  .qty-controls input {
+    width: 100%;
+  }
+
+  .summary-line {
     font-size: 14px;
   }
 
@@ -493,32 +620,4 @@
     padding: 14px;
     font-size: 15px;
   }
-}
-/* Order Item Thumbnail - เพิ่มส่วนนี้ */
-.item .thumb {
-  width: 80px;
-  height: 80px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  flex-shrink: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.item .thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-/* Fallback สำหรับรูปที่โหลดไม่ได้ */
-.item .thumb::after {
-  content: '📦';
-  font-size: 32px;
-  position: absolute;
-  opacity: 0.2;
 }
